@@ -29,7 +29,7 @@ internal class ModMenuGUI : MonoBehaviour
     private Vector2 scrollPosition;
     internal static bool DevToolsMenuOpen = false;
     internal static bool canOpenDevToolsMenu = true;
-    public static List<ModMenuBaseItem> menuMethods = null!;
+    public static List<ModMenuBaseItem> menuMethods = new();
     internal static bool menuExists = false;
     const uint queueSize = 30;  // number of messages to keep
     // Queue<string> myLogQueue;
@@ -56,8 +56,8 @@ internal class ModMenuGUI : MonoBehaviour
         scrollStart = MENUY + 30;
     }
 
-    int printedThisFrame = 0;
-    long lastFrameCount = 0;
+    // int printedThisFrame = 0;
+    // long lastFrameCount = 0;
     // private void InternalUnityLogger_OnUnityInternalLog(object sender, UnityLogEventArgs e)
     // {
     //     if(e.Message.StartsWith("[Error  :")

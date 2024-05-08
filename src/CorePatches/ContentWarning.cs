@@ -8,11 +8,11 @@ class CWInit
 {
     internal static void Init()
     {
-        ModMenu.RegisterModMenuItem(new IsEditorItem());
+        ModMenu.RegisterModMenuItem(new InfiniteJumpPatch());
     }
 }
 
-class IsEditorItem : ModMenuButtonToggle
+class InfiniteJumpPatch : ModMenuButtonToggle
 {
     ModMenuItemConfig myConf = new()
     {
@@ -27,7 +27,7 @@ class IsEditorItem : ModMenuButtonToggle
     private static void PlayerController_TryJump(ILContext il)
     {
         ILCursor c = new(il);
-        // we remove if statements that return
+        // we remove if statement branches and pop the values that would have been popped
         while (c.TryGotoNext(x => x.MatchBgeUn(out _) || x.MatchBleUn(out _)))
         {
             c.Remove();

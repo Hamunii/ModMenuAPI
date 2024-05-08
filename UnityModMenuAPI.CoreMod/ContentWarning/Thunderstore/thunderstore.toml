@@ -13,15 +13,15 @@ Hamunii-UnityModMenuAPI = "1.0.0"
 
 [build]
 icon = "./icon.png"
-readme = "./README.md"
+readme = "./CW_README.md"
 outdir = "./Packages"
 
 [[build.copy]]
-source = "./CHANGELOG.md"
-target = "/"
+source = "./CW_CHANGELOG.md"
+target = "/CHANGELOG.md"
 
 [[build.copy]]
-source = "../bin/Release/netstandard2.1/Hamunii.UnityModMenuAPI.dll"
+source = "../bin/Release/netstandard2.1/Hamunii.UnityModMenuAPI.CoreMod.CW.dll"
 target = "/BepInEx/plugins/"
 
 [publish]

@@ -14,7 +14,7 @@ public abstract class ModMenuBaseItem
     /// <summary>
     /// The metadata for this menu item.
     /// </summary>
-    public abstract ModMenuItemConfig Config { get; }
+    public abstract ModMenuItemMetadata Metadata { get; }
 
     /// <summary>
     /// The common interface for clicking different types of buttons programmatically.

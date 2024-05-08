@@ -178,7 +178,7 @@ internal class ModMenuGUI : MonoBehaviour
                 else
                     currentButtonStyle = GUI.skin.button;
 
-                if (GUI.Button(new Rect(CenterX + menuIdx * MenuWidth * 1.05f, MenuY + 30 + (ItemIdx * 30), ItemWidth, 30), $"{menuItem.Config.Name}", currentButtonStyle))
+                if (GUI.Button(new Rect(CenterX + menuIdx * MenuWidth * 1.05f, MenuY + 30 + (ItemIdx * 30), ItemWidth, 30), $"{menuItem.Metadata.Name}", currentButtonStyle))
                 {
                     menuItem.CommonInvoke();
                 }

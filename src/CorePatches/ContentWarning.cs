@@ -19,12 +19,8 @@ class CWInit
 
 class InfiniteJumpPatch : ModMenuButtonToggle
 {
-    ModMenuItemConfig myConf = new()
-    {
-        Name = "Infinite Jump",
-        ToolTip = "Removes check for touching ground when jumping."
-    };
-    public override ModMenuItemConfig Config => myConf;
+    readonly ModMenuItemMetadata meta = new("Infinite Jump", "Removes check for touching ground when jumping.");
+    public override ModMenuItemMetadata Metadata => meta;
     protected override void OnEnable() { IL.PlayerController.TryJump += PlayerController_TryJump; }
     protected override void OnDisable() { IL.PlayerController.TryJump -= PlayerController_TryJump; }
 

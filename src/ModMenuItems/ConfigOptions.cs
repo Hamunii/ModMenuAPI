@@ -21,8 +21,21 @@ public enum CommonPermission
 /// <summary>
 /// Metadata for a mod menu item.
 /// </summary>
-public class ModMenuItemConfig
+public class ModMenuItemMetadata
 {
+    /// <summary>
+    /// The constructor for menu item Metadata. 
+    /// </summary>
+    /// <param name="itemName">The name of your menu item.</param>
+    /// <param name="tooltip">The tooltip for your menu item. Shown when hovering on the item.</param>
+    public ModMenuItemMetadata(string itemName, string? tooltip)
+    {
+        Name = itemName;
+        if(tooltip is not null)
+            ToolTip = tooltip;
+    }
+    public ModMenuItemMetadata(string itemName)
+        : this(itemName, null) { }
     /// <summary>
     /// The name of your menu item.
     /// </summary>

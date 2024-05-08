@@ -1,6 +1,5 @@
 using BepInEx;
 using BepInEx.Logging;
-using UnityModMenuAPI.CorePatches.CW;
 using UnityModMenuAPI.MenuGUI;
 using UnityEngine;
 using MonoMod.RuntimeDetour.HookGen;
@@ -18,9 +17,6 @@ internal class Plugin : BaseUnityPlugin
     {
         Logger = base.Logger;
         Instance = this;
-
-        CWPlayerPatches.Init();
-        CWStatsPatches.Init();
         
         InitializeGUI();
 
@@ -36,7 +32,7 @@ internal class Plugin : BaseUnityPlugin
     static void InitializeGUI(){
         ModMenuGUI.canOpenDevToolsMenu = true;
         if(!ModMenuGUI.menuExists){
-            myGUIObject = new GameObject("DevToolsGUI");
+            myGUIObject = new GameObject("UnityModMenuAPI_GUI");
             UnityEngine.Object.DontDestroyOnLoad(myGUIObject);
             myGUIObject.hideFlags = HideFlags.HideAndDontSave;
             myGUIObject.AddComponent<ModMenuGUI>();

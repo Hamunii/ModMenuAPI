@@ -46,4 +46,4 @@ Backup/
 UpgradeLog.htm
 
 # Thunderstore packages
-/Thunderstore/Packages
+**/Thunderstore/Packages

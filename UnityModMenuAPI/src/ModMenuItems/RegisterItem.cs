@@ -1,7 +1,7 @@
 using UnityModMenuAPI.MenuGUI;
 using UnityModMenuAPI.ModMenuItems.BaseItems;
 
-namespace UnityModMenuAPI;
+namespace UnityModMenuAPI.ModMenuItems;
 
 public static class ModMenu
 {
@@ -13,7 +13,7 @@ public static class ModMenu
     /// <param name="menuTitle">The name of the menu this item will be listed under.</param>
     public static void RegisterModMenuItem(ModMenuBaseItem menuItem, string menuTitle)
     {
-        ModMenuMenuItem? menu = ModMenuGUI.ModMenus.Find(x => x.MenuTitle.Equals(menuTitle));
+        ModMenuMenuItem? menu = ModMenuGUI.ModMenus.Find(x => x.MenuTitle.ToLower().Equals(menuTitle.ToLower()));
         if(menu is not null)
             menu.MenuItems.Add(menuItem);
         else

@@ -33,14 +33,9 @@ internal class ModMenuGUI : MonoBehaviour
     internal static bool canOpenDevToolsMenu = true;
     public static List<ModMenuBaseItem> menuMethods = new();
     public static List<ModMenuMenuItem> ModMenus = new();
-    internal static bool menuExists = false;
-    // const uint queueSize = 30;  // number of messages to keep
-    // Queue<string> myLogQueue;
+    internal static bool menuExists = false;    
     private void Awake()
     {
-        // myLogQueue = new();
-        // InternalUnityLogger.OnUnityInternalLog += InternalUnityLogger_OnUnityInternalLog;
-
         isMenuOpen = false;
         MenuWidth = 250;
         MenuHeight = Screen.width / 4;
@@ -58,48 +53,6 @@ internal class ModMenuGUI : MonoBehaviour
         CenterX = MenuX + ((MenuWidth / 2) - (ItemWidth / 2));
         scrollStart = MenuY + 30;
     }
-
-    // int printedThisFrame = 0;
-    // long lastFrameCount = 0;
-    // private void InternalUnityLogger_OnUnityInternalLog(object sender, UnityLogEventArgs e)
-    // {
-    //     if(e.Message.StartsWith("[Error  :")
-    //     || e.Message.StartsWith("[Message:")
-    //     || e.Message.StartsWith("[Info   :")
-    //     || e.Message.StartsWith("[Warning:")
-    //     || e.Message.StartsWith("[Debug  :"))
-    //         myLogQueue.Enqueue(e.Message);
-    //     else{
-    //         string level = e.LogLevel.ToString();
-    //         if(level == "Debug") return;
-    //         if(level == "Log") level = "Info";
-    //         level = level.PadRight(6);
-    //         myLogQueue.Enqueue($"[{level}: Unity Log] {e.Message}");
-    //     }
-    //     if (e.LogLevel == InternalLogLevel.Exception){
-    //         StackTrace stackTrace = new StackTrace(); 
-    //         myLogQueue.Enqueue(stackTrace.GetFrames().ToString());
-    //     }
-    //     while (myLogQueue.Count > queueSize)
-    //         myLogQueue.Dequeue();
-
-    //     if(Time.frameCount == lastFrameCount){
-    //         printedThisFrame++;
-    //         if(printedThisFrame >= 30){
-    //             StartCoroutine(DisableForAFewFrames());
-    //             return;
-    //         }
-    //     }
-    //     else printedThisFrame = 0;
-
-    //     lastFrameCount = Time.frameCount;
-    // }
-
-    // private IEnumerator DisableForAFewFrames(){
-    //     InternalUnityLogger.OnUnityInternalLog -= InternalUnityLogger_OnUnityInternalLog;
-    //     yield return new WaitUntil(() => Time.frameCount > lastFrameCount + 1);
-    //     InternalUnityLogger.OnUnityInternalLog += InternalUnityLogger_OnUnityInternalLog;
-    // }
 
     private Texture2D MakeTex(int width, int height, Color col)
     {
@@ -154,19 +107,7 @@ internal class ModMenuGUI : MonoBehaviour
 
     private void OnGUI()
     {
-        // Plugin.Logger.LogInfo("\n" + string.Join("\n Mirror > ", myLogQueue.ToArray()));
         if(menuStyle == null) { InitializeMenu(); }
-
-        // GUI.Label(
-        //     new Rect(
-        //         5,                      // x, left offset
-        //         Screen.height / 2,      // y, top offset
-        //         Screen.width / 3,       // width
-        //         540                     // height
-        //     ),
-        //     "\n" + string.Join("", myLogQueue.ToArray()),
-        //     GUI.skin.textArea
-        // );
 
         if(!canOpenDevToolsMenu) { return; }
         if(!DevToolsMenuOpen) return;

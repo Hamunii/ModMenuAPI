@@ -1,9 +1,8 @@
-using System;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using UnityModMenuAPI.ModMenuItems;
 
-namespace UnityModMenuAPI.CorePatches.CW;
+namespace CoreModCW.CorePatches;
 
 class CWPlayerPatches
 {
@@ -47,16 +46,21 @@ class FastMovementPatch : ModMenuButtonToggle
         }
 
         self = Player.localPlayer.refs.controller;
-
-        origMovForce = self.movementForce;
-        origStaminaReg = self.staminaRegRate;
-        origJumpForceDur = self.jumpForceDuration;
-        origJumpForceOverTime = self.jumpForceOverTime;
+        
+        if(!valuesSet)
+        {
+            origMovForce = self.movementForce;
+            origStaminaReg = self.staminaRegRate;
+            origJumpForceDur = self.jumpForceDuration;
+            origJumpForceOverTime = self.jumpForceOverTime;
+        }
 
         self.movementForce = 150;
         self.staminaRegRate = 10000;
         self.jumpForceDuration = 0.1f;
         self.jumpForceOverTime = 2f;
+
+        valuesSet = true;
     }
     protected override void OnDisable()
     {
@@ -68,6 +72,7 @@ class FastMovementPatch : ModMenuButtonToggle
         self.jumpForceDuration = origJumpForceDur;
         self.jumpForceOverTime = origJumpForceOverTime;
     }
+    static bool valuesSet = false;
     static float origMovForce;
     static float origStaminaReg;
     static float origJumpForceDur;

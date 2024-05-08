@@ -1,9 +1,6 @@
-using System;
-using Mono.Cecil.Cil;
-using MonoMod.Cil;
 using UnityModMenuAPI.ModMenuItems;
 
-namespace UnityModMenuAPI.CorePatches.CW;
+namespace CoreModCW.CorePatches;
 
 class CWStatsPatches
 {
@@ -12,6 +9,10 @@ class CWStatsPatches
     {
         ModMenu.RegisterModMenuItem(new SetMoneyPatch(), menuTitle);
         ModMenu.RegisterModMenuItem(new ResetMoneyPatch(), menuTitle);
+
+        ModMenu.RegisterModMenuItem(new SetMetaCoinsPatch(), menuTitle);
+        ModMenu.RegisterModMenuItem(new ResetMetaCoinsPatch(), menuTitle);
+
         ModMenu.RegisterModMenuItem(new NextDayPatch(), menuTitle);
         ModMenu.RegisterModMenuItem(new FulfillQuotaPatch(), menuTitle);
     }
@@ -19,7 +20,7 @@ class CWStatsPatches
 
 class SetMoneyPatch : ModMenuButtonAction
 {
-    ModMenuItemMetadata meta = new("Set Money");
+    readonly ModMenuItemMetadata meta = new("Set Money");
     public override ModMenuItemMetadata Metadata => meta;
 
     public override void OnClick()
@@ -31,13 +32,35 @@ class SetMoneyPatch : ModMenuButtonAction
 
 class ResetMoneyPatch : ModMenuButtonAction
 {
-    ModMenuItemMetadata meta = new("Reset Money");
+    readonly ModMenuItemMetadata meta = new("Reset Money");
     public override ModMenuItemMetadata Metadata => meta;
 
     public override void OnClick()
     {
         SurfaceNetworkHandler.RoomStats.Money = 0;
         SurfaceNetworkHandler.RoomStats.OnStatsUpdated();
+    }
+}
+
+class SetMetaCoinsPatch : ModMenuButtonAction
+{
+    readonly ModMenuItemMetadata meta = new("Set Meta Coins");
+    public override ModMenuItemMetadata Metadata => meta;
+
+    public override void OnClick()
+    {
+        MetaProgressionHandler.SetMetaCoins(100000000);
+    }
+}
+
+class ResetMetaCoinsPatch : ModMenuButtonAction
+{
+    readonly ModMenuItemMetadata meta = new("Reset Meta Coins");
+    public override ModMenuItemMetadata Metadata => meta;
+
+    public override void OnClick()
+    {
+        MetaProgressionHandler.SetMetaCoins(0);
     }
 }
 
@@ -54,7 +77,7 @@ class NextDayPatch : ModMenuButtonAction
 
 class FulfillQuotaPatch : ModMenuButtonAction
 {
-    ModMenuItemMetadata meta = new("Fulfill Quota");
+    readonly ModMenuItemMetadata meta = new("Fulfill Quota");
     public override ModMenuItemMetadata Metadata => meta;
 
     public override void OnClick()

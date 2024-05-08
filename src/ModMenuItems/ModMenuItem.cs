@@ -7,26 +7,15 @@ namespace UnityModMenuAPI.ModMenuItems;
 /// </summary>
 public abstract class ModMenuButtonAction : ModMenuBaseItem
 {
-    private bool _clickable = true;
-    /// <summary>
-    /// Determines whether or not this button can be clicked. Useful if an action requires specific circumstances to be executed successfully.
-    /// </summary>
-    public bool Clickable 
-    {
-        get
-        {
-            return _clickable;
-        }
-        set
-        {
-            _clickable = value;
-        }
-    }
+    internal override ModMenuItemType ItemType => ModMenuItemType.ActionButton;
+
     public abstract void OnClick();
     public override void CommonInvoke()
     {
-        if(_clickable)
-            OnClick();
+        if(!Clickable)
+            return;
+
+        OnClick();
     }
 }
 
@@ -35,16 +24,14 @@ public abstract class ModMenuButtonAction : ModMenuBaseItem
 /// </summary>
 public abstract class ModMenuButtonToggle : ModMenuBaseItem
 {
+    internal override ModMenuItemType ItemType => ModMenuItemType.ToggleButton;
     private bool _enabled = false;
     /// <summary>
     /// State of the patch.
     /// </summary>
     public bool Enabled
     {
-        get 
-        { 
-            return _enabled;
-        }
+        get { return _enabled; }
         set 
         {
             if (_enabled == value)
@@ -68,6 +55,9 @@ public abstract class ModMenuButtonToggle : ModMenuBaseItem
     protected abstract void OnDisable();
     public override void CommonInvoke()
     {
+        if(!Clickable)
+            return;
+
         switch(_enabled)
         {
             case true: Enabled = false; break;

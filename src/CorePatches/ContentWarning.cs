@@ -4,15 +4,23 @@ using UnityModMenuAPI.ModMenuItems;
 
 namespace UnityModMenuAPI.CorePatches.CW;
 
+class CWInit
+{
+    internal static void Init()
+    {
+        ModMenu.RegisterModMenuItem(new IsEditorItem());
+    }
+}
+
 class IsEditorItem : ModMenuButtonToggle
 {
-    public override ModMenuItemConfig Config => new()
+    ModMenuItemConfig myConf = new()
     {
         Name = "Infinite Jump",
         ToolTip = "Removes check for touching ground when jumping."
     };
+    public override ModMenuItemConfig Config => myConf;
     
-
     protected override void OnEnable() { IL.PlayerController.TryJump += PlayerController_TryJump; }
     protected override void OnDisable() { IL.PlayerController.TryJump -= PlayerController_TryJump; }
 

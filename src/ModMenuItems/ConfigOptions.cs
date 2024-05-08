@@ -36,3 +36,9 @@ public class ModMenuItemConfig
     /// </summary>
     public CommonPermission Permission = CommonPermission.AllClients;
 }
+
+public enum ModMenuItemType
+{
+    ActionButton,
+    ToggleButton
+}

@@ -5,11 +5,12 @@ using System.Diagnostics;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityModMenuAPI.ModMenuItems;
 using UnityModMenuAPI.ModMenuItems.BaseItems;
 
 namespace UnityModMenuAPI.MenuGUI;
 
-internal class ModMenu : MonoBehaviour
+internal class ModMenuGUI : MonoBehaviour
 {
     public bool isMenuOpen;
     private float MENUWIDTH = 800;
@@ -21,7 +22,7 @@ internal class ModMenu : MonoBehaviour
     private float scrollStart;
 
     private GUIStyle menuStyle = null!;
-    private GUIStyle enableButtonStyle = null!;
+    private GUIStyle enabledButtonStyle = null!;
     private GUIStyle hScrollStyle = null!;
     private GUIStyle vScrollStyle = null!;
 
@@ -115,7 +116,7 @@ internal class ModMenu : MonoBehaviour
         if (menuStyle == null)
         {
             menuStyle = new GUIStyle(UnityEngine.GUI.skin.box);
-            enableButtonStyle = new GUIStyle(UnityEngine.GUI.skin.button);
+            enabledButtonStyle = new GUIStyle(UnityEngine.GUI.skin.button);
             hScrollStyle = new GUIStyle(UnityEngine.GUI.skin.horizontalScrollbar);
             vScrollStyle = new GUIStyle(UnityEngine.GUI.skin.verticalScrollbar);
 
@@ -124,10 +125,10 @@ internal class ModMenu : MonoBehaviour
             menuStyle.fontSize = 18;
             menuStyle.normal.background.hideFlags = HideFlags.HideAndDontSave;
 
-            enableButtonStyle.normal.textColor = Color.white;
-            enableButtonStyle.normal.background = MakeTex(2, 2, new Color(0.0f, 0.01f, 0.2f, .9f));
-            enableButtonStyle.hover.background = MakeTex(2, 2, new Color(0.4f, 0.01f, 0.1f, .9f));
-            enableButtonStyle.normal.background.hideFlags = HideFlags.HideAndDontSave;
+            enabledButtonStyle.normal.textColor = Color.white;
+            enabledButtonStyle.normal.background = MakeTex(2, 2, new Color(0.0f, 0.01f, 0.2f, .9f));
+            enabledButtonStyle.hover.background = MakeTex(2, 2, new Color(0.4f, 0.01f, 0.1f, .9f));
+            enabledButtonStyle.normal.background.hideFlags = HideFlags.HideAndDontSave;
 
             hScrollStyle.normal.background = MakeTex(2, 2, new Color(0.01f, 0.01f, 0.1f, 0f));
 
@@ -154,13 +155,19 @@ internal class ModMenu : MonoBehaviour
 
         if(!canOpenDevToolsMenu) { return; }
         if(!DevToolsMenuOpen) return;
-        GUI.Box(new Rect(MENUX, MENUY, MENUWIDTH, MENUHEIGHT), "DevTools Menu", menuStyle);
+        GUI.Box(new Rect(MENUX, MENUY, MENUWIDTH, MENUHEIGHT), "UnityModMenuAPI", menuStyle);
         scrollPosition = GUI.BeginScrollView(new Rect(MENUX, MENUY + 30, MENUWIDTH, MENUHEIGHT - 50), scrollPosition, new Rect(MENUX, scrollStart, ITEMWIDTH, menuMethods.Count * 30), false, true, hScrollStyle, vScrollStyle);
 
         int idx = 0;
         foreach (var menuItem in menuMethods)
         {   
-            if (GUI.Button(new Rect(CENTERX, MENUY + 30 + (idx * 30), ITEMWIDTH, 30), $"{menuItem.Config.Name}", enableButtonStyle))
+            GUIStyle? currentButtonStyle = null;
+            if (menuItem.ItemType == ModMenuItemType.ToggleButton)
+                currentButtonStyle = ((ModMenuButtonToggle)menuItem).Enabled ? enabledButtonStyle : GUI.skin.button;
+            else
+                currentButtonStyle = GUI.skin.button;
+
+            if (GUI.Button(new Rect(CENTERX, MENUY + 30 + (idx * 30), ITEMWIDTH, 30), $"{menuItem.Config.Name}", currentButtonStyle))
             {
                 menuItem.CommonInvoke();
             }

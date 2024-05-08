@@ -3,6 +3,8 @@ using BepInEx.Logging;
 using UnityModMenuAPI.CorePatches.CW;
 using UnityModMenuAPI.MenuGUI;
 using UnityEngine;
+using MonoMod.RuntimeDetour.HookGen;
+using System.Reflection;
 
 namespace UnityModMenuAPI;
 
@@ -22,6 +24,12 @@ internal class Plugin : BaseUnityPlugin
         InitializeGUI();
 
         Logger.LogInfo($"{MyPluginInfo.PLUGIN_GUID} v{MyPluginInfo.PLUGIN_VERSION} has loaded!");
+    }
+
+    private void OnDestroy()
+    {
+        HookEndpointManager.RemoveAllOwnedBy(Assembly.GetExecutingAssembly());
+        Destroy(myGUIObject);
     }
 
     static void InitializeGUI(){

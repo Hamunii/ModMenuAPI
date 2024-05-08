@@ -5,8 +5,22 @@ namespace UnityModMenuAPI;
 
 public static class ModMenu
 {
-    public static void RegisterModMenuItem(ModMenuBaseItem menuItem)
+    /// <summary>
+    /// Register a menu item under a menu with the specified name.<br/>
+    /// If a menu with the specified title doesn't exist yet, it will be created.
+    /// </summary>
+    /// <param name="menuItem">The menu item to register.</param>
+    /// <param name="menuTitle">The name of the menu this item will be listed under.</param>
+    public static void RegisterModMenuItem(ModMenuBaseItem menuItem, string menuTitle)
     {
-        ModMenuGUI.menuMethods.Add(menuItem);
+        ModMenuMenuItem? menu = ModMenuGUI.ModMenus.Find(x => x.MenuTitle.Equals(menuTitle));
+        if(menu is not null)
+            menu.MenuItems.Add(menuItem);
+        else
+        {
+            var newMenu = new ModMenuMenuItem(menuTitle);
+            newMenu.MenuItems.Add(menuItem);
+            ModMenuGUI.ModMenus.Add(newMenu);
+        }
     }
 }

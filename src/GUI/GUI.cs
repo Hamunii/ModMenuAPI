@@ -13,25 +13,27 @@ namespace UnityModMenuAPI.MenuGUI;
 internal class ModMenuGUI : MonoBehaviour
 {
     public bool isMenuOpen;
-    private float MENUWIDTH = 800;
-    private float MENUHEIGHT = 400;
-    private float MENUX;
-    private float MENUY;
-    private float ITEMWIDTH = 300;
-    private float CENTERX;
+    private float MenuWidth = 500;
+    private float MenuHeight = 100;
+    private float MenuX;
+    private float MenuY;
+    private float ItemWidth = 300;
+    private float CenterX;
     private float scrollStart;
 
     private GUIStyle menuStyle = null!;
-    private GUIStyle enabledButtonStyle = null!;
+    private GUIStyle toggleEnabledButtonStyle = null!;
+    private GUIStyle toggleDisabledButtonStyle = null!;
     private GUIStyle hScrollStyle = null!;
     private GUIStyle vScrollStyle = null!;
 
-    private Vector2 scrollPosition;
+    // private Vector2 scrollPosition;
     internal static bool DevToolsMenuOpen = false;
     internal static bool canOpenDevToolsMenu = true;
     public static List<ModMenuBaseItem> menuMethods = new();
+    public static List<ModMenuMenuItem> ModMenus = new();
     internal static bool menuExists = false;
-    const uint queueSize = 30;  // number of messages to keep
+    // const uint queueSize = 30;  // number of messages to keep
     // Queue<string> myLogQueue;
     private void Awake()
     {
@@ -39,9 +41,9 @@ internal class ModMenuGUI : MonoBehaviour
         // InternalUnityLogger.OnUnityInternalLog += InternalUnityLogger_OnUnityInternalLog;
 
         isMenuOpen = false;
-        MENUWIDTH = Screen.width / 6;
-        MENUHEIGHT = Screen.width / 4;
-        ITEMWIDTH = MENUWIDTH / 1.2f;
+        MenuWidth = 250;
+        MenuHeight = Screen.width / 4;
+        ItemWidth = MenuWidth / 1.1f;
 
         // this is center at center of menu
         //MENUX = (Screen.width / 2) - (MENUWIDTH / 2);
@@ -50,10 +52,10 @@ internal class ModMenuGUI : MonoBehaviour
         //MENUX = (Screen.width / 2);
 
         // this is right off the edge of the screen on the right side
-        MENUX = Screen.width - MENUWIDTH;
-        MENUY = (Screen.height / 2) - (MENUHEIGHT / 2);
-        CENTERX = MENUX + ((MENUWIDTH / 2) - (ITEMWIDTH / 2));
-        scrollStart = MENUY + 30;
+        MenuX = 20;
+        MenuY = 20;
+        CenterX = MenuX + ((MenuWidth / 2) - (ItemWidth / 2));
+        scrollStart = MenuY + 30;
     }
 
     // int printedThisFrame = 0;
@@ -116,19 +118,25 @@ internal class ModMenuGUI : MonoBehaviour
         if (menuStyle == null)
         {
             menuStyle = new GUIStyle(UnityEngine.GUI.skin.box);
-            enabledButtonStyle = new GUIStyle(UnityEngine.GUI.skin.button);
+            toggleEnabledButtonStyle = new GUIStyle(UnityEngine.GUI.skin.button);
+            toggleDisabledButtonStyle = new GUIStyle(UnityEngine.GUI.skin.button);
             hScrollStyle = new GUIStyle(UnityEngine.GUI.skin.horizontalScrollbar);
             vScrollStyle = new GUIStyle(UnityEngine.GUI.skin.verticalScrollbar);
 
             menuStyle.normal.textColor = Color.white;
-            menuStyle.normal.background = MakeTex(2, 2, new Color(0.01f, 0.01f, 0.1f, .9f));
+            menuStyle.normal.background = MakeTex(2, 2, new Color(0.01f, 0.01f, 0.01f, .8f));
             menuStyle.fontSize = 18;
             menuStyle.normal.background.hideFlags = HideFlags.HideAndDontSave;
 
-            enabledButtonStyle.normal.textColor = Color.white;
-            enabledButtonStyle.normal.background = MakeTex(2, 2, new Color(0.0f, 0.01f, 0.2f, .9f));
-            enabledButtonStyle.hover.background = MakeTex(2, 2, new Color(0.4f, 0.01f, 0.1f, .9f));
-            enabledButtonStyle.normal.background.hideFlags = HideFlags.HideAndDontSave;
+            toggleEnabledButtonStyle.normal.textColor = Color.white;
+            toggleEnabledButtonStyle.normal.background = MakeTex(2, 2, new Color(0.5f, 0.5f, 0.8f, .8f));
+            toggleEnabledButtonStyle.hover.background = MakeTex(2, 2, new Color(0.8f, 0.05f, 0.5f, .8f));
+            toggleEnabledButtonStyle.normal.background.hideFlags = HideFlags.HideAndDontSave;
+
+            toggleDisabledButtonStyle.normal.textColor = Color.white;
+            toggleDisabledButtonStyle.normal.background = MakeTex(2, 2, new Color(0.3f, 0.3f, 0.3f, .8f));
+            toggleDisabledButtonStyle.hover.background = MakeTex(2, 2, new Color(0.4f, 0.4f, 0.6f, .8f));
+            toggleDisabledButtonStyle.normal.background.hideFlags = HideFlags.HideAndDontSave;
 
             hScrollStyle.normal.background = MakeTex(2, 2, new Color(0.01f, 0.01f, 0.1f, 0f));
 
@@ -155,26 +163,28 @@ internal class ModMenuGUI : MonoBehaviour
 
         if(!canOpenDevToolsMenu) { return; }
         if(!DevToolsMenuOpen) return;
-        GUI.Box(new Rect(MENUX, MENUY, MENUWIDTH, MENUHEIGHT), "UnityModMenuAPI", menuStyle);
-        scrollPosition = GUI.BeginScrollView(new Rect(MENUX, MENUY + 30, MENUWIDTH, MENUHEIGHT - 50), scrollPosition, new Rect(MENUX, scrollStart, ITEMWIDTH, menuMethods.Count * 30), false, true, hScrollStyle, vScrollStyle);
+        int menuIdx = 0;
+        foreach (var menu in ModMenus)
+        {
+            GUI.Box(new Rect(MenuX + menuIdx * MenuWidth * 1.05f, MenuY, MenuWidth, menu.MenuItems.Count * 30 + 42), menu.MenuTitle, menuStyle);
+            // scrollPosition = GUI.BeginScrollView(new Rect(MENUX, MENUY + 30, MENUWIDTH, MENUHEIGHT - 50), scrollPosition, new Rect(MENUX, scrollStart, ITEMWIDTH, menuMethods.Count * 30), false, true, hScrollStyle, vScrollStyle);
 
-        int idx = 0;
-        foreach (var menuItem in menuMethods)
-        {   
-            GUIStyle? currentButtonStyle = null;
-            if (menuItem.ItemType == ModMenuItemType.ToggleButton)
-                currentButtonStyle = ((ModMenuButtonToggle)menuItem).Enabled ? enabledButtonStyle : GUI.skin.button;
-            else
-                currentButtonStyle = GUI.skin.button;
+            int ItemIdx = 0;
+            foreach (var menuItem in menu.MenuItems)
+            {   
+                GUIStyle? currentButtonStyle = null;
+                if (menuItem.ItemType == ModMenuItemType.ToggleButton)
+                    currentButtonStyle = ((ModMenuButtonToggle)menuItem).Enabled ? toggleEnabledButtonStyle : toggleDisabledButtonStyle;
+                else
+                    currentButtonStyle = GUI.skin.button;
 
-            if (GUI.Button(new Rect(CENTERX, MENUY + 30 + (idx * 30), ITEMWIDTH, 30), $"{menuItem.Config.Name}", currentButtonStyle))
-            {
-                menuItem.CommonInvoke();
+                if (GUI.Button(new Rect(CenterX + menuIdx * MenuWidth * 1.05f, MenuY + 30 + (ItemIdx * 30), ItemWidth, 30), $"{menuItem.Config.Name}", currentButtonStyle))
+                {
+                    menuItem.CommonInvoke();
+                }
+                ItemIdx++;
             }
-            idx++;
+            menuIdx++;
         }
-
-        // End the scroll view that we began above.
-        GUI.EndScrollView();
     }
 }

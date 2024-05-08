@@ -6,6 +6,11 @@ namespace UnityModMenuAPI.ModMenuItems.BaseItems;
 /// </summary>
 public abstract class ModMenuBaseItem
 {
+    internal ModMenuBaseItem()
+    {
+        if (Metadata.InvokeOnInit)
+            CommonInvoke();
+    }
     /// <summary>
     /// The type of this menu item.
     /// </summary>

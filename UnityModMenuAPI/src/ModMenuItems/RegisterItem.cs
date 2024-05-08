@@ -23,4 +23,11 @@ public static class ModMenu
             ModMenuGUI.ModMenus.Add(newMenu);
         }
     }
+    /// <summary>
+    /// Remove all menu items.
+    /// </summary>
+    public static void RemoveAll()
+    {
+        ModMenuGUI.ModMenus.Clear();
+    }
 }

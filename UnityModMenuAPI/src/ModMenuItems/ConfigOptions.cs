@@ -48,6 +48,10 @@ public class ModMenuItemMetadata
     /// The permission visibility for this menu item. If permission isn't met, this menu item will be hidden.
     /// </summary>
     public CommonPermission Permission = CommonPermission.AllClients;
+    /// <summary>
+    /// Should the menu item be invoked (toggled or executed) immediately after creation.
+    /// </summary>
+    public bool InvokeOnInit = false;
 }
 
 public enum ModMenuItemType

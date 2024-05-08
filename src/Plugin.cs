@@ -19,7 +19,8 @@ internal class Plugin : BaseUnityPlugin
         Logger = base.Logger;
         Instance = this;
 
-        CWInit.Init();
+        CWPlayerPatches.Init();
+        CWStatsPatches.Init();
         
         InitializeGUI();
 

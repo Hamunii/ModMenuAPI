@@ -24,6 +24,7 @@ internal class ModMenuGUI : MonoBehaviour
     private GUIStyle menuStyle = null!;
     private GUIStyle toggleEnabledButtonStyle = null!;
     private GUIStyle toggleDisabledButtonStyle = null!;
+    private GUIStyle actionButtonStyle = null!;
     private GUIStyle hScrollStyle = null!;
     private GUIStyle vScrollStyle = null!;
 
@@ -120,6 +121,7 @@ internal class ModMenuGUI : MonoBehaviour
             menuStyle = new GUIStyle(UnityEngine.GUI.skin.box);
             toggleEnabledButtonStyle = new GUIStyle(UnityEngine.GUI.skin.button);
             toggleDisabledButtonStyle = new GUIStyle(UnityEngine.GUI.skin.button);
+            actionButtonStyle = new GUIStyle(UnityEngine.GUI.skin.button);
             hScrollStyle = new GUIStyle(UnityEngine.GUI.skin.horizontalScrollbar);
             vScrollStyle = new GUIStyle(UnityEngine.GUI.skin.verticalScrollbar);
 
@@ -137,6 +139,11 @@ internal class ModMenuGUI : MonoBehaviour
             toggleDisabledButtonStyle.normal.background = MakeTex(2, 2, new Color(0.3f, 0.3f, 0.3f, .8f));
             toggleDisabledButtonStyle.hover.background = MakeTex(2, 2, new Color(0.4f, 0.4f, 0.6f, .8f));
             toggleDisabledButtonStyle.normal.background.hideFlags = HideFlags.HideAndDontSave;
+
+            actionButtonStyle.normal.textColor = Color.white;
+            actionButtonStyle.normal.background = MakeTex(2, 2, new Color(0.4f, 0.45f, 0.35f, .8f));
+            actionButtonStyle.hover.background = MakeTex(2, 2, new Color(0.6f, 0.7f, 0.5f, .8f));
+            actionButtonStyle.normal.background.hideFlags = HideFlags.HideAndDontSave;
 
             hScrollStyle.normal.background = MakeTex(2, 2, new Color(0.01f, 0.01f, 0.1f, 0f));
 
@@ -176,7 +183,7 @@ internal class ModMenuGUI : MonoBehaviour
                 if (menuItem.ItemType == ModMenuItemType.ToggleButton)
                     currentButtonStyle = ((ModMenuButtonToggle)menuItem).Enabled ? toggleEnabledButtonStyle : toggleDisabledButtonStyle;
                 else
-                    currentButtonStyle = GUI.skin.button;
+                    currentButtonStyle = actionButtonStyle;
 
                 if (GUI.Button(new Rect(CenterX + menuIdx * MenuWidth * 1.05f, MenuY + 30 + (ItemIdx * 30), ItemWidth, 30), $"{menuItem.Metadata.Name}", currentButtonStyle))
                 {

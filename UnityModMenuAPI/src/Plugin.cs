@@ -17,7 +17,11 @@ internal class Plugin : BaseUnityPlugin
     {
         Logger = base.Logger;
         Instance = this;
-        
+
+#if DEBUG && false // BepInEx ScriptEngine doesn't play well with dependencies that are also supposed to be live reloaded.
+        DebugActions.Init();
+#endif
+
         InitializeGUI();
 
         Logger.LogInfo($"{MyPluginInfo.PLUGIN_GUID} v{MyPluginInfo.PLUGIN_VERSION} has loaded!");

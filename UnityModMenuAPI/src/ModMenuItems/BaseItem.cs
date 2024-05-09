@@ -1,3 +1,5 @@
+using System.Reflection;
+
 namespace UnityModMenuAPI.ModMenuItems.BaseItems;
 
 /// <summary>
@@ -36,4 +38,6 @@ public abstract class ModMenuBaseItem
         get { return _clickable; }
         set { _clickable = value; }
     }
+
+    internal Assembly FromAss { get; set; } = null!;
 }

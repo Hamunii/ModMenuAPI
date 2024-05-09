@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityModMenuAPI.ModMenuItems.BaseItems;
 
 namespace UnityModMenuAPI.ModMenuItems;
@@ -9,6 +10,23 @@ public abstract class ModMenuButtonAction : ModMenuBaseItem
 {
     internal override ModMenuItemType ItemType => ModMenuItemType.ActionButton;
 
+    public abstract void OnClick();
+    public override void CommonInvoke()
+    {
+        if(!Clickable)
+            return;
+
+        OnClick();
+    }
+}
+
+/// <summary>
+/// An button which contains multiple action buttons after clicking. Interfaced by <c>OnClick</c>.
+/// </summary>
+public abstract class ModMenuButtonActionMultiple : ModMenuBaseItem
+{
+    internal override ModMenuItemType ItemType => ModMenuItemType.ActionButtonMultiple;
+    public abstract List<ModMenuBaseItem> MenuItems { get; }
     public abstract void OnClick();
     public override void CommonInvoke()
     {

@@ -52,6 +52,18 @@
         <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all"/>
     </ItemGroup>
 
+    <!-- For testing only, should be removed later -->
+    <ItemGroup Condition="$(CI) != 'true'">
+        <Reference Include="$(ManagedDirectory)Assembly-CSharp.dll" Publicize="true" Private="false"/>
+        <Reference Include="$(ManagedDirectory)Unity.Netcode.Runtime.dll" Publicize="true" Private="false"/>
+        <Reference Include="$(ManagedDirectory)Unity.InputSystem.dll" Publicize="true" Private="false"/>
+    </ItemGroup>
+
+    <!-- References - HookGen Assemblies -->
+    <ItemGroup>
+        <Reference Include="$(MMHOOKManaged)MMHOOK_Assembly-CSharp.dll"/>
+    </ItemGroup>
+
     <!-- Build our Thunderstore package when making a release build. This does not publish our package. -->
     <!-- For more information about tcli, see https://github.com/thunderstore-io/thunderstore-cli/wiki -->
     <Target Name="PackThunderstore" AfterTargets="PostBuildEvent" Condition="$(Configuration) == 'Release'">

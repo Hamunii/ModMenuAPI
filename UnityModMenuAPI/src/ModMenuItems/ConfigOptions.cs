@@ -57,5 +57,6 @@ public class ModMenuItemMetadata
 public enum ModMenuItemType
 {
     ActionButton,
+    ActionButtonMultiple,
     ToggleButton
 }

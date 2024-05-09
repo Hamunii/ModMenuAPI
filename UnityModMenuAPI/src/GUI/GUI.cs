@@ -25,10 +25,11 @@ internal class ModMenuGUI : MonoBehaviour
     private GUIStyle toggleEnabledButtonStyle = null!;
     private GUIStyle toggleDisabledButtonStyle = null!;
     private GUIStyle actionButtonStyle = null!;
+    private GUIStyle invisibleButtonStyle = null!;
     private GUIStyle hScrollStyle = null!;
     private GUIStyle vScrollStyle = null!;
 
-    // private Vector2 scrollPosition;
+    private Vector2 scrollPosition;
     internal static bool DevToolsMenuOpen = false;
     internal static bool canOpenDevToolsMenu = true;
     public static List<ModMenuBaseItem> menuMethods = new();
@@ -75,6 +76,7 @@ internal class ModMenuGUI : MonoBehaviour
             toggleEnabledButtonStyle = new GUIStyle(UnityEngine.GUI.skin.button);
             toggleDisabledButtonStyle = new GUIStyle(UnityEngine.GUI.skin.button);
             actionButtonStyle = new GUIStyle(UnityEngine.GUI.skin.button);
+            invisibleButtonStyle = new GUIStyle(UnityEngine.GUI.skin.button);
             hScrollStyle = new GUIStyle(UnityEngine.GUI.skin.horizontalScrollbar);
             vScrollStyle = new GUIStyle(UnityEngine.GUI.skin.verticalScrollbar);
 
@@ -86,17 +88,27 @@ internal class ModMenuGUI : MonoBehaviour
             toggleEnabledButtonStyle.normal.textColor = Color.white;
             toggleEnabledButtonStyle.normal.background = MakeTex(2, 2, new Color(0.5f, 0.5f, 0.8f, .8f));
             toggleEnabledButtonStyle.hover.background = MakeTex(2, 2, new Color(0.8f, 0.05f, 0.5f, .8f));
+            toggleEnabledButtonStyle.active.background = MakeTex(2, 2, new Color(0.4f, 0.04f, 0.7f, .8f));
             toggleEnabledButtonStyle.normal.background.hideFlags = HideFlags.HideAndDontSave;
 
             toggleDisabledButtonStyle.normal.textColor = Color.white;
             toggleDisabledButtonStyle.normal.background = MakeTex(2, 2, new Color(0.3f, 0.3f, 0.3f, .8f));
             toggleDisabledButtonStyle.hover.background = MakeTex(2, 2, new Color(0.4f, 0.4f, 0.6f, .8f));
+            // For some reason hover and active and these don't work in Lethal Company, but do work in Content Warning.
+            // toggleDisabledButtonStyle.active.background = MakeTex(2, 2, new Color(0.2f, 0.2f, 0.2f, .8f));
             toggleDisabledButtonStyle.normal.background.hideFlags = HideFlags.HideAndDontSave;
 
             actionButtonStyle.normal.textColor = Color.white;
             actionButtonStyle.normal.background = MakeTex(2, 2, new Color(0.4f, 0.45f, 0.35f, .8f));
             actionButtonStyle.hover.background = MakeTex(2, 2, new Color(0.6f, 0.7f, 0.5f, .8f));
+            // actionButtonStyle.active.background = MakeTex(2, 2, new Color(0.3f, 0.35f, 0.25f, .8f));
             actionButtonStyle.normal.background.hideFlags = HideFlags.HideAndDontSave;
+
+            invisibleButtonStyle.normal.textColor = Color.white;
+            invisibleButtonStyle.normal.background = MakeTex(2, 2, new Color(0f, 0f, 0f, 0f));
+            invisibleButtonStyle.hover.background = MakeTex(2, 2, new Color(0f, 0f, 0f, 0.05f));
+            // invisibleButtonStyle.active.background = MakeTex(2, 2, new Color(0f, 0f, 0f, 0.1f));
+            invisibleButtonStyle.normal.background.hideFlags = HideFlags.HideAndDontSave;
 
             hScrollStyle.normal.background = MakeTex(2, 2, new Color(0.01f, 0.01f, 0.1f, 0f));
 
@@ -104,6 +116,9 @@ internal class ModMenuGUI : MonoBehaviour
             GUI.skin.textArea.fontSize = 16;
         }
     }
+    static ModMenuButtonActionMultiple? contextMenuOwner = null;
+    static float contextMenuX = 0;
+    static float contextMenuY = 0;
 
     private void OnGUI()
     {
@@ -114,25 +129,72 @@ internal class ModMenuGUI : MonoBehaviour
         int menuIdx = 0;
         foreach (var menu in ModMenus)
         {
-            GUI.Box(new Rect(MenuX + menuIdx * MenuWidth * 1.05f, MenuY, MenuWidth, menu.MenuItems.Count * 30 + 42), menu.MenuTitle, menuStyle);
-            // scrollPosition = GUI.BeginScrollView(new Rect(MENUX, MENUY + 30, MENUWIDTH, MENUHEIGHT - 50), scrollPosition, new Rect(MENUX, scrollStart, ITEMWIDTH, menuMethods.Count * 30), false, true, hScrollStyle, vScrollStyle);
+            DrawMenu(ref menuIdx, menu);
+        }
 
-            int ItemIdx = 0;
-            foreach (var menuItem in menu.MenuItems)
-            {   
-                GUIStyle? currentButtonStyle = null;
-                if (menuItem.ItemType == ModMenuItemType.ToggleButton)
-                    currentButtonStyle = ((ModMenuButtonToggle)menuItem).Enabled ? toggleEnabledButtonStyle : toggleDisabledButtonStyle;
-                else
-                    currentButtonStyle = actionButtonStyle;
+        MaybeDrawContextMenu();
+    }
 
-                if (GUI.Button(new Rect(CenterX + menuIdx * MenuWidth * 1.05f, MenuY + 30 + (ItemIdx * 30), ItemWidth, 30), $"{menuItem.Metadata.Name}", currentButtonStyle))
-                {
-                    menuItem.CommonInvoke();
-                }
-                ItemIdx++;
+    void DrawMenu(ref int menuIdx, ModMenuMenuItem menu)
+    {
+        GUI.Box(new Rect(MenuX + menuIdx * MenuWidth * 1.05f, MenuY, MenuWidth, menu.MenuItems.Count * 30 + 42), menu.MenuTitle, menuStyle);
+        // scrollPosition = GUI.BeginScrollView(new Rect(MENUX, MENUY + 30, MENUWIDTH, MENUHEIGHT - 50), scrollPosition, new Rect(MENUX, scrollStart, ITEMWIDTH, menuMethods.Count * 30), false, true, hScrollStyle, vScrollStyle);
+
+        int ItemIdx = 0;
+        foreach (var menuItem in menu.MenuItems)
+        {   
+            GUIStyle? currentButtonStyle = null;
+            if (menuItem.ItemType == ModMenuItemType.ToggleButton)
+                currentButtonStyle = ((ModMenuButtonToggle)menuItem).Enabled ? toggleEnabledButtonStyle : toggleDisabledButtonStyle;
+            else
+                currentButtonStyle = actionButtonStyle;
+            if (contextMenuOwner is not null)
+            {
+                GUI.Box(new Rect(CenterX + menuIdx * MenuWidth * 1.05f, MenuY + 30 + (ItemIdx * 30), ItemWidth, 30), $"{menuItem.Metadata.Name}", currentButtonStyle);
             }
-            menuIdx++;
+            else if (GUI.Button(new Rect(CenterX + menuIdx * MenuWidth * 1.05f, MenuY + 30 + (ItemIdx * 30), ItemWidth, 30), $"{menuItem.Metadata.Name}", currentButtonStyle))
+            {
+                menuItem.CommonInvoke();
+                if (menuItem.ItemType == ModMenuItemType.ActionButtonMultiple)
+                {
+                    contextMenuOwner = (ModMenuButtonActionMultiple)menuItem;
+                    contextMenuX = (menuIdx + 1) * MenuWidth * 1.05f;
+                    contextMenuY = MenuY + (ItemIdx * 30);
+                }
+            }
+            ItemIdx++;
+        }
+        menuIdx++;
+    }
+
+    void MaybeDrawContextMenu()
+    {
+        if (contextMenuOwner is null)
+            return;
+
+        GUI.Box(new Rect(MenuX + contextMenuX, contextMenuY, MenuWidth, contextMenuOwner.MenuItems.Count * 30 + 42), contextMenuOwner.Metadata.Name, menuStyle);
+        scrollPosition = GUI.BeginScrollView(new Rect(MenuX + contextMenuX, contextMenuY, MenuWidth, Screen.height - contextMenuY), scrollPosition, new Rect(MenuX + contextMenuX, contextMenuY, MenuWidth, contextMenuOwner.MenuItems.Count * 30 + 42), false, false, hScrollStyle, vScrollStyle);
+
+        int ItemIdx = 0;
+        foreach (var menuItem in contextMenuOwner.MenuItems)
+        {   
+            GUIStyle? currentButtonStyle = null;
+            if (menuItem.ItemType == ModMenuItemType.ToggleButton)
+                currentButtonStyle = ((ModMenuButtonToggle)menuItem).Enabled ? toggleEnabledButtonStyle : toggleDisabledButtonStyle;
+            else
+                currentButtonStyle = actionButtonStyle;
+            if (GUI.Button(new Rect(CenterX + contextMenuX, contextMenuY + 30 + (ItemIdx * 30), ItemWidth, 30), $"{menuItem.Metadata.Name}", currentButtonStyle))
+            {
+                menuItem.CommonInvoke();
+            }
+            ItemIdx++;
+        }
+
+        GUI.EndScrollView();
+
+        if (GUI.Button(new Rect(0, 0, Screen.width, Screen.height), "", invisibleButtonStyle))
+        {
+            contextMenuOwner = null;
         }
     }
 }

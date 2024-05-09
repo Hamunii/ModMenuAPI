@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Reflection;
 using UnityModMenuAPI.MenuGUI;
 using UnityModMenuAPI.ModMenuItems.BaseItems;
 
@@ -13,6 +15,8 @@ public static class ModMenu
     /// <param name="menuTitle">The name of the menu this item will be listed under.</param>
     public static void RegisterModMenuItem(ModMenuBaseItem menuItem, string menuTitle)
     {
+        menuItem.FromAss = Assembly.GetCallingAssembly();
+
         ModMenuMenuItem? menu = ModMenuGUI.ModMenus.Find(x => x.MenuTitle.ToLower().Equals(menuTitle.ToLower()));
         if(menu is not null)
             menu.MenuItems.Add(menuItem);
@@ -24,10 +28,11 @@ public static class ModMenu
         }
     }
     /// <summary>
-    /// Remove all menu items.
+    /// Remove all menu items belonging to the specified assembly.<br/>
+    /// Intended to be used when live reloading assemblies with e.g. BepInEx ScriptEngine.
     /// </summary>
-    public static void RemoveAll()
+    public static void RemoveAll(Assembly ass)
     {
-        ModMenuGUI.ModMenus.Clear();
+        ModMenuGUI.ModMenus.SelectMany(x => x.MenuItems).ToList().RemoveAll(x => x.FromAss.Equals(ass));
     }
 }

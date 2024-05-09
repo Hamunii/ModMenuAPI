@@ -8,17 +8,19 @@ using UnityModMenuAPI.ModMenuItems;
 namespace CoreModLC;
 
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
-internal class PluginLC : BaseUnityPlugin
+internal class Plugin : BaseUnityPlugin
 {
-    public static PluginLC Instance { get; private set; } = null!;
+    public static Plugin Instance { get; private set; } = null!;
     internal new static ManualLogSource Logger { get; private set; } = null!;
     private void Awake()
     {
         Logger = base.Logger;
         Instance = this;
 
+        LCMiscPatches.Init();
         LCPlayerPatches.Init();
         LCActionPatches.Init();
+        LCActionEnemy.Init();
         
         Logger.LogInfo($"{MyPluginInfo.PLUGIN_GUID} v{MyPluginInfo.PLUGIN_VERSION} has loaded!");
     }
@@ -26,6 +28,6 @@ internal class PluginLC : BaseUnityPlugin
     private void OnDestroy()
     {
         HookEndpointManager.RemoveAllOwnedBy(Assembly.GetExecutingAssembly());
-        ModMenu.RemoveAll();
+        ModMenu.RemoveAll(Assembly.GetExecutingAssembly());
     }
 }

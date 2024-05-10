@@ -11,8 +11,8 @@ class LCActionPatches
     internal static void Init()
     {
         On.QuickMenuManager.Start += QuickMenuManager_Start;
-        ModMenu.RegisterModMenuItem(new TeleportSelfToEntranceAction(), menuTitle);
-        ModMenu.RegisterModMenuItem(new ToggleTestRoomAction(), menuTitle);
+        ModMenu.RegisterItem(new TeleportSelfToEntranceAction(), menuTitle);
+        ModMenu.RegisterItem(new ToggleTestRoomAction(), menuTitle);
     }
 
     private static void QuickMenuManager_Start(On.QuickMenuManager.orig_Start orig, QuickMenuManager self)
@@ -22,7 +22,7 @@ class LCActionPatches
     }
 }
 
-class TeleportSelfToEntranceAction : ModMenuButtonAction
+class TeleportSelfToEntranceAction : ModMenuButtonActionBase
 {
     readonly ModMenuItemMetadata meta = new("Teleport Self To Entrance");
     public override ModMenuItemMetadata Metadata => meta;
@@ -47,7 +47,7 @@ class TeleportSelfToEntranceAction : ModMenuButtonAction
     }
 }
 
-class ToggleTestRoomAction : ModMenuButtonAction
+class ToggleTestRoomAction : ModMenuButtonActionBase
 {
     readonly ModMenuItemMetadata meta = new("Toggle Test Room");
     public override ModMenuItemMetadata Metadata => meta;

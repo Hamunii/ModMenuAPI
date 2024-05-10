@@ -9,14 +9,14 @@ class CWPlayerPatches
     const string menuTitle = "Player";
     internal static void Init()
     {
-        ModMenu.RegisterModMenuItem(new InfiniteJumpPatch(), menuTitle);
-        ModMenu.RegisterModMenuItem(new FastMovementPatch(), menuTitle);
+        ModMenu.RegisterItem(new InfiniteJumpPatch(), menuTitle);
+        ModMenu.RegisterItem(new FastMovementPatch(), menuTitle);
     }
 }
 
-class InfiniteJumpPatch : ModMenuButtonToggle
+class InfiniteJumpPatch : ModMenuButtonToggleBase
 {
-    readonly ModMenuItemMetadata meta = new("Infinite Jump", "Removes check for touching ground when jumping.");
+    readonly ModMenuItemMetadata meta = new("Infinite Jumpt", "Removes check for touching ground when jumping.");
     public override ModMenuItemMetadata Metadata => meta;
     protected override void OnEnable() { IL.PlayerController.TryJump += PlayerController_TryJump; }
     protected override void OnDisable() { IL.PlayerController.TryJump -= PlayerController_TryJump; }
@@ -33,7 +33,7 @@ class InfiniteJumpPatch : ModMenuButtonToggle
     }
 }
 
-class FastMovementPatch : ModMenuButtonToggle
+class FastMovementPatch : ModMenuButtonToggleBase
 {
     readonly ModMenuItemMetadata meta = new("Fast Movement");
     public override ModMenuItemMetadata Metadata => meta;

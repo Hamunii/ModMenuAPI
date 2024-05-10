@@ -1,21 +1,23 @@
-#if DEBUG
+#if DEBUG && false
 using System.Collections;
 using System.Collections.Generic;
 using GameNetcodeStuff;
 using UnityEngine;
 using UnityModMenuAPI;
 using UnityModMenuAPI.ModMenuItems;
-using UnityModMenuAPI.ModMenuItems.BaseItems;
 
-class DebugActions
+namespace CoreModLC.CorePatches;
+
+class DebugLCActions
 {
-    const string menuDebug = "DEBUG";
-    internal static SpawnEnemyActionMultiple enemySpawnItem = new();
-    internal static GiveSelfItemActionMultiple itemSpawnItem = new();
+    const string menuAction = "Action";
+    internal static ModMenuButtonContextMenuInstantiable enemySpawnItem = new("Spawn Enemy >");
+    internal static ModMenuButtonContextMenuInstantiable itemSpawnItem = new("Spawn Item >");
+    internal static List<SpawnableEnemyWithRarity> allEnemiesList = new();
     internal static void Init()
     {
-        ModMenu.RegisterModMenuItem(enemySpawnItem, menuDebug);
-        ModMenu.RegisterModMenuItem(itemSpawnItem, menuDebug);
+        ModMenu.RegisterModMenuItem(enemySpawnItem, menuAction);
+        ModMenu.RegisterModMenuItem(itemSpawnItem, menuAction);
         if(RoundManager.Instance is not null)
         {
             PopulateEnemies();
@@ -29,7 +31,7 @@ class DebugActions
     {
         orig(self);
 
-        if (SpawnEnemyActionMultiple.allEnemiesList.Count == 0)
+        if (allEnemiesList.Count == 0)
         {
             PopulateEnemies();
             PopulateItems();
@@ -37,11 +39,11 @@ class DebugActions
     }
     private static void PopulateEnemies()
     {
-        SpawnEnemyActionMultiple.allEnemiesList.AddRange(RoundManager.Instance.currentLevel.Enemies);
-        SpawnEnemyActionMultiple.allEnemiesList.AddRange(RoundManager.Instance.currentLevel.OutsideEnemies);
-        SpawnEnemyActionMultiple.allEnemiesList.AddRange(RoundManager.Instance.currentLevel.DaytimeEnemies);
+        allEnemiesList.AddRange(RoundManager.Instance.currentLevel.Enemies);
+        allEnemiesList.AddRange(RoundManager.Instance.currentLevel.OutsideEnemies);
+        allEnemiesList.AddRange(RoundManager.Instance.currentLevel.DaytimeEnemies);
 
-        foreach(var enemy in SpawnEnemyActionMultiple.allEnemiesList)
+        foreach(var enemy in allEnemiesList)
         {
             enemySpawnItem.MenuItems.Add(new SpawnEnemyAction(enemy));
         }
@@ -55,17 +57,7 @@ class DebugActions
     }
 }
 
-class SpawnEnemyActionMultiple : ModMenuButtonActionMultiple
-{
-    internal static List<SpawnableEnemyWithRarity> allEnemiesList = new();
-    internal List<ModMenuBaseItem> Items = new();
-    public override List<ModMenuBaseItem> MenuItems => Items;
-    readonly ModMenuItemMetadata meta = new($"Spawn Enemy >");
-    public override ModMenuItemMetadata Metadata => meta;
-    public override void OnClick() { }
-}
-
-class SpawnEnemyAction : ModMenuButtonAction
+class SpawnEnemyAction : ModMenuButtonActionBase
 {
     private SpawnableEnemyWithRarity _enemyWithRarity;
     internal SpawnEnemyAction(SpawnableEnemyWithRarity enemyWithRarity)
@@ -84,16 +76,7 @@ class SpawnEnemyAction : ModMenuButtonAction
     }
 }
 
-class GiveSelfItemActionMultiple : ModMenuButtonActionMultiple
-{
-    internal List<ModMenuBaseItem> Items = new();
-    public override List<ModMenuBaseItem> MenuItems => Items;
-    readonly ModMenuItemMetadata meta = new($"Give Item to Self >");
-    public override ModMenuItemMetadata Metadata => meta;
-    public override void OnClick() { }
-}
-
-class GiveSelfItemAction : ModMenuButtonAction
+class GiveSelfItemAction : ModMenuButtonActionBase
 {
     private Item _item;
     internal GiveSelfItemAction(Item item)

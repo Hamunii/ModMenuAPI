@@ -32,7 +32,7 @@ internal class ModMenuGUI : MonoBehaviour
     private Vector2 scrollPosition;
     internal static bool DevToolsMenuOpen = false;
     internal static bool canOpenDevToolsMenu = true;
-    public static List<ModMenuBaseItem> menuMethods = new();
+    public static List<ModMenuBaseItemBase> menuMethods = new();
     public static List<ModMenuMenuItem> ModMenus = new();
     internal static bool menuExists = false;    
     private void Awake()
@@ -41,12 +41,6 @@ internal class ModMenuGUI : MonoBehaviour
         MenuWidth = 250;
         MenuHeight = Screen.width / 4;
         ItemWidth = MenuWidth / 1.1f;
-
-        // this is center at center of menu
-        //MENUX = (Screen.width / 2) - (MENUWIDTH / 2);
-
-        // this is center at left side of menu
-        //MENUX = (Screen.width / 2);
 
         // this is right off the edge of the screen on the right side
         MenuX = 20;
@@ -88,7 +82,7 @@ internal class ModMenuGUI : MonoBehaviour
             toggleEnabledButtonStyle.normal.textColor = Color.white;
             toggleEnabledButtonStyle.normal.background = MakeTex(2, 2, new Color(0.5f, 0.5f, 0.8f, .8f));
             toggleEnabledButtonStyle.hover.background = MakeTex(2, 2, new Color(0.8f, 0.05f, 0.5f, .8f));
-            toggleEnabledButtonStyle.active.background = MakeTex(2, 2, new Color(0.4f, 0.04f, 0.7f, .8f));
+            // toggleEnabledButtonStyle.active.background = MakeTex(2, 2, new Color(0.4f, 0.04f, 0.7f, .8f));
             toggleEnabledButtonStyle.normal.background.hideFlags = HideFlags.HideAndDontSave;
 
             toggleDisabledButtonStyle.normal.textColor = Color.white;
@@ -116,7 +110,7 @@ internal class ModMenuGUI : MonoBehaviour
             GUI.skin.textArea.fontSize = 16;
         }
     }
-    static ModMenuButtonActionMultiple? contextMenuOwner = null;
+    static ModMenuButtonContextMenuBase? contextMenuOwner = null;
     static float contextMenuX = 0;
     static float contextMenuY = 0;
 
@@ -129,6 +123,7 @@ internal class ModMenuGUI : MonoBehaviour
         int menuIdx = 0;
         foreach (var menu in ModMenus)
         {
+            // Plugin.Logger.LogInfo("Drawing " + menu.MenuTitle);
             DrawMenu(ref menuIdx, menu);
         }
 
@@ -138,14 +133,13 @@ internal class ModMenuGUI : MonoBehaviour
     void DrawMenu(ref int menuIdx, ModMenuMenuItem menu)
     {
         GUI.Box(new Rect(MenuX + menuIdx * MenuWidth * 1.05f, MenuY, MenuWidth, menu.MenuItems.Count * 30 + 42), menu.MenuTitle, menuStyle);
-        // scrollPosition = GUI.BeginScrollView(new Rect(MENUX, MENUY + 30, MENUWIDTH, MENUHEIGHT - 50), scrollPosition, new Rect(MENUX, scrollStart, ITEMWIDTH, menuMethods.Count * 30), false, true, hScrollStyle, vScrollStyle);
 
         int ItemIdx = 0;
         foreach (var menuItem in menu.MenuItems)
         {   
             GUIStyle? currentButtonStyle = null;
             if (menuItem.ItemType == ModMenuItemType.ToggleButton)
-                currentButtonStyle = ((ModMenuButtonToggle)menuItem).Enabled ? toggleEnabledButtonStyle : toggleDisabledButtonStyle;
+                currentButtonStyle = ((ModMenuButtonToggleBase)menuItem).Enabled ? toggleEnabledButtonStyle : toggleDisabledButtonStyle;
             else
                 currentButtonStyle = actionButtonStyle;
             if (contextMenuOwner is not null)
@@ -155,9 +149,9 @@ internal class ModMenuGUI : MonoBehaviour
             else if (GUI.Button(new Rect(CenterX + menuIdx * MenuWidth * 1.05f, MenuY + 30 + (ItemIdx * 30), ItemWidth, 30), $"{menuItem.Metadata.Name}", currentButtonStyle))
             {
                 menuItem.CommonInvoke();
-                if (menuItem.ItemType == ModMenuItemType.ActionButtonMultiple)
+                if (menuItem.ItemType == ModMenuItemType.ContextMenu)
                 {
-                    contextMenuOwner = (ModMenuButtonActionMultiple)menuItem;
+                    contextMenuOwner = (ModMenuButtonContextMenuBase)menuItem;
                     contextMenuX = (menuIdx + 1) * MenuWidth * 1.05f;
                     contextMenuY = MenuY + (ItemIdx * 30);
                 }
@@ -180,7 +174,7 @@ internal class ModMenuGUI : MonoBehaviour
         {   
             GUIStyle? currentButtonStyle = null;
             if (menuItem.ItemType == ModMenuItemType.ToggleButton)
-                currentButtonStyle = ((ModMenuButtonToggle)menuItem).Enabled ? toggleEnabledButtonStyle : toggleDisabledButtonStyle;
+                currentButtonStyle = ((ModMenuButtonToggleBase)menuItem).Enabled ? toggleEnabledButtonStyle : toggleDisabledButtonStyle;
             else
                 currentButtonStyle = actionButtonStyle;
             if (GUI.Button(new Rect(CenterX + contextMenuX, contextMenuY + 30 + (ItemIdx * 30), ItemWidth, 30), $"{menuItem.Metadata.Name}", currentButtonStyle))
@@ -194,6 +188,7 @@ internal class ModMenuGUI : MonoBehaviour
 
         if (GUI.Button(new Rect(0, 0, Screen.width, Screen.height), "", invisibleButtonStyle))
         {
+            contextMenuOwner.OnMenuClosed();
             contextMenuOwner = null;
         }
     }

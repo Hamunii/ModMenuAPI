@@ -1,11 +1,8 @@
 using BepInEx;
 using BepInEx.Logging;
-using CoreModLC.CorePatches;
-using MonoMod.RuntimeDetour.HookGen;
-using System.Reflection;
-using UnityModMenuAPI.ModMenuItems;
+using UnityEngine;
 
-namespace CoreModLC;
+namespace UnityModMenuAPI.NetRxLoader;
 
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
 internal class Plugin : BaseUnityPlugin
@@ -16,18 +13,9 @@ internal class Plugin : BaseUnityPlugin
     {
         Logger = base.Logger;
         Instance = this;
-
-        LCMiscPatches.Init();
-        LCPlayerPatches.Init();
-        LCActionPatches.Init();
-        LCActionEnemy.Init();
-        
         Logger.LogInfo($"{MyPluginInfo.PLUGIN_GUID} v{MyPluginInfo.PLUGIN_VERSION} has loaded!");
+
+        HotLoadManager.Init();
     }
 
-    private void OnDestroy()
-    {
-        HookEndpointManager.RemoveAllOwnedBy(Assembly.GetExecutingAssembly());
-        ModMenu.RemoveAllOwnedBy(Assembly.GetExecutingAssembly());
-    }
 }

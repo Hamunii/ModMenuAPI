@@ -14,13 +14,12 @@ class LCMiscPatches
     const string menuMisc = "Misc";
     internal static void Init()
     {
-        ModMenu.RegisterModMenuItem(new IsEditorPatch(), menuMisc);
-        ModMenu.RegisterModMenuItem(new InfiniteCreditsPatch(), menuMisc);
-        
+        ModMenu.RegisterItem(new IsEditorPatch(), menuMisc);
+        ModMenu.RegisterItem(new InfiniteCreditsPatch(), menuMisc);
     }
 }
 
-class IsEditorPatch : ModMenuButtonToggle
+class IsEditorPatch : ModMenuButtonToggleBase
 {
     readonly ModMenuItemMetadata meta = new("IsEditor"){ InvokeOnInit = true };
     public override ModMenuItemMetadata Metadata => meta;
@@ -45,7 +44,7 @@ class IsEditorPatch : ModMenuButtonToggle
 }
 
 
-internal class InfiniteCreditsPatch : ModMenuButtonToggle
+internal class InfiniteCreditsPatch : ModMenuButtonToggleBase
 {
     readonly ModMenuItemMetadata meta = new("Infinite Credits"){ InvokeOnInit = true };
     public override ModMenuItemMetadata Metadata => meta;

@@ -6,9 +6,9 @@ namespace UnityModMenuAPI.ModMenuItems.BaseItems;
 /// A base class to derive from by menu item classes. <br/>
 /// Only use this if you are developing new button types for UnityModMenuAPI.
 /// </summary>
-public abstract class ModMenuBaseItem
+public abstract class ModMenuBaseItemBase
 {
-    internal ModMenuBaseItem()
+    internal ModMenuBaseItemBase()
     {
         if (Metadata.InvokeOnInit)
             CommonInvoke();
@@ -39,5 +39,5 @@ public abstract class ModMenuBaseItem
         set { _clickable = value; }
     }
 
-    internal Assembly FromAss { get; set; } = null!;
+    internal Assembly ParentAssembly { get; set; } = null!;
 }

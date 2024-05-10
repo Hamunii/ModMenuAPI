@@ -7,18 +7,18 @@ class CWStatsPatches
     const string menuTitle = "Stats";
     internal static void Init()
     {
-        ModMenu.RegisterModMenuItem(new SetMoneyPatch(), menuTitle);
-        ModMenu.RegisterModMenuItem(new ResetMoneyPatch(), menuTitle);
+        ModMenu.RegisterItem(new SetMoneyPatch(), menuTitle);
+        ModMenu.RegisterItem(new ResetMoneyPatch(), menuTitle);
 
-        ModMenu.RegisterModMenuItem(new SetMetaCoinsPatch(), menuTitle);
-        ModMenu.RegisterModMenuItem(new ResetMetaCoinsPatch(), menuTitle);
+        ModMenu.RegisterItem(new SetMetaCoinsPatch(), menuTitle);
+        ModMenu.RegisterItem(new ResetMetaCoinsPatch(), menuTitle);
 
-        ModMenu.RegisterModMenuItem(new NextDayPatch(), menuTitle);
-        ModMenu.RegisterModMenuItem(new FulfillQuotaPatch(), menuTitle);
+        ModMenu.RegisterItem(new NextDayPatch(), menuTitle);
+        ModMenu.RegisterItem(new FulfillQuotaPatch(), menuTitle);
     }
 }
 
-class SetMoneyPatch : ModMenuButtonAction
+class SetMoneyPatch : ModMenuButtonActionBase
 {
     readonly ModMenuItemMetadata meta = new("Set Money");
     public override ModMenuItemMetadata Metadata => meta;
@@ -30,7 +30,7 @@ class SetMoneyPatch : ModMenuButtonAction
     }
 }
 
-class ResetMoneyPatch : ModMenuButtonAction
+class ResetMoneyPatch : ModMenuButtonActionBase
 {
     readonly ModMenuItemMetadata meta = new("Reset Money");
     public override ModMenuItemMetadata Metadata => meta;
@@ -42,7 +42,7 @@ class ResetMoneyPatch : ModMenuButtonAction
     }
 }
 
-class SetMetaCoinsPatch : ModMenuButtonAction
+class SetMetaCoinsPatch : ModMenuButtonActionBase
 {
     readonly ModMenuItemMetadata meta = new("Set Meta Coins");
     public override ModMenuItemMetadata Metadata => meta;
@@ -53,7 +53,7 @@ class SetMetaCoinsPatch : ModMenuButtonAction
     }
 }
 
-class ResetMetaCoinsPatch : ModMenuButtonAction
+class ResetMetaCoinsPatch : ModMenuButtonActionBase
 {
     readonly ModMenuItemMetadata meta = new("Reset Meta Coins");
     public override ModMenuItemMetadata Metadata => meta;
@@ -64,7 +64,7 @@ class ResetMetaCoinsPatch : ModMenuButtonAction
     }
 }
 
-class NextDayPatch : ModMenuButtonAction
+class NextDayPatch : ModMenuButtonActionBase
 {
     ModMenuItemMetadata meta = new("Next Day");
     public override ModMenuItemMetadata Metadata => meta;
@@ -75,7 +75,7 @@ class NextDayPatch : ModMenuButtonAction
     }
 }
 
-class FulfillQuotaPatch : ModMenuButtonAction
+class FulfillQuotaPatch : ModMenuButtonActionBase
 {
     readonly ModMenuItemMetadata meta = new("Fulfill Quota");
     public override ModMenuItemMetadata Metadata => meta;

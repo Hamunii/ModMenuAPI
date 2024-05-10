@@ -15,19 +15,19 @@ class LCPlayerPatches
     const string menuMisc = "Misc";
     internal static void Init()
     {
-        ModMenu.RegisterModMenuItem(new InfiniteSprintPatch(), menuPlayer);
-        ModMenu.RegisterModMenuItem(new MovementCheatPatch(), menuPlayer);
-        ModMenu.RegisterModMenuItem(new OnDeathHealPatch(), menuPlayer);
-        ModMenu.RegisterModMenuItem(new InfiniteShotgunAmmoPatch(), menuPlayer);
+        ModMenu.RegisterItem(new InfiniteSprintPatch(), menuPlayer);
+        ModMenu.RegisterItem(new MovementCheatPatch(), menuPlayer);
+        ModMenu.RegisterItem(new OnDeathHealPatch(), menuPlayer);
+        ModMenu.RegisterItem(new InfiniteShotgunAmmoPatch(), menuPlayer);
     }
 }
-class InfiniteSprintPatch : ModMenuButtonToggle
+class InfiniteSprintPatch : ModMenuButtonToggleBase
 {
     readonly ModMenuItemMetadata meta = new("Infinite Sprint"){ InvokeOnInit = true };
     public override ModMenuItemMetadata Metadata => meta;
 
-    protected override void OnEnable(){ On.GameNetcodeStuff.PlayerControllerB.Update += InfiniteSprint_PlayerControllerB_Update; }
-    protected override void OnDisable(){ On.GameNetcodeStuff.PlayerControllerB.Update -= InfiniteSprint_PlayerControllerB_Update; }
+    protected override void OnEnable() => On.GameNetcodeStuff.PlayerControllerB.Update += InfiniteSprint_PlayerControllerB_Update;
+    protected override void OnDisable() => On.GameNetcodeStuff.PlayerControllerB.Update -= InfiniteSprint_PlayerControllerB_Update;
 
     private static void InfiniteSprint_PlayerControllerB_Update(On.GameNetcodeStuff.PlayerControllerB.orig_Update orig, GameNetcodeStuff.PlayerControllerB self)
     {
@@ -36,7 +36,7 @@ class InfiniteSprintPatch : ModMenuButtonToggle
     }
 }
 
-internal class MovementCheatPatch : ModMenuButtonToggle
+internal class MovementCheatPatch : ModMenuButtonToggleBase
 {
     readonly ModMenuItemMetadata meta = new("Movement Cheat"){ InvokeOnInit = true };
     public override ModMenuItemMetadata Metadata => meta;
@@ -103,13 +103,13 @@ internal class MovementCheatPatch : ModMenuButtonToggle
     }
 }
 
-internal class OnDeathHealPatch : ModMenuButtonToggle
+internal class OnDeathHealPatch : ModMenuButtonToggleBase
 {
     readonly ModMenuItemMetadata meta = new("On Death: Heal"){ InvokeOnInit = true };
     public override ModMenuItemMetadata Metadata => meta;
 
-    protected override void OnEnable(){ On.GameNetcodeStuff.PlayerControllerB.KillPlayer += OnDeathHeal_PlayerControllerB_KillPlayer; }
-    protected override void OnDisable(){ On.GameNetcodeStuff.PlayerControllerB.KillPlayer -= OnDeathHeal_PlayerControllerB_KillPlayer; }
+    protected override void OnEnable() => On.GameNetcodeStuff.PlayerControllerB.KillPlayer += OnDeathHeal_PlayerControllerB_KillPlayer;
+    protected override void OnDisable() => On.GameNetcodeStuff.PlayerControllerB.KillPlayer -= OnDeathHeal_PlayerControllerB_KillPlayer;
 
     private static void OnDeathHeal_PlayerControllerB_KillPlayer(On.GameNetcodeStuff.PlayerControllerB.orig_KillPlayer orig, GameNetcodeStuff.PlayerControllerB self, Vector3 bodyVelocity, bool spawnBody, CauseOfDeath causeOfDeath, int deathAnimation)
     {   
@@ -121,12 +121,12 @@ internal class OnDeathHealPatch : ModMenuButtonToggle
     }
 }
 
-internal class InfiniteShotgunAmmoPatch : ModMenuButtonToggle
+internal class InfiniteShotgunAmmoPatch : ModMenuButtonToggleBase
 {
     readonly ModMenuItemMetadata meta = new("Infinite Shotgun Ammo"){ InvokeOnInit = true };
     public override ModMenuItemMetadata Metadata => meta;
-    protected override void OnEnable(){ IL.ShotgunItem.ItemActivate += InfiniteShotgunAmmo_ShotgunItem_ItemActivate; }
-    protected override void OnDisable(){ IL.ShotgunItem.ItemActivate -= InfiniteShotgunAmmo_ShotgunItem_ItemActivate; }
+    protected override void OnEnable() => IL.ShotgunItem.ItemActivate += InfiniteShotgunAmmo_ShotgunItem_ItemActivate;
+    protected override void OnDisable() => IL.ShotgunItem.ItemActivate -= InfiniteShotgunAmmo_ShotgunItem_ItemActivate;
 
     private static void InfiniteShotgunAmmo_ShotgunItem_ItemActivate(ILContext il)
     {

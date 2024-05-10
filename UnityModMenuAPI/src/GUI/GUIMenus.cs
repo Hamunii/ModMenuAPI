@@ -17,5 +17,5 @@ internal class ModMenuMenuItem
         MenuTitle = menuTitle;
     }
     internal string MenuTitle = "Unnamed Menu";
-    internal List<ModMenuBaseItem> MenuItems = new();
+    internal List<ModMenuBaseItemBase> MenuItems = new();
 }

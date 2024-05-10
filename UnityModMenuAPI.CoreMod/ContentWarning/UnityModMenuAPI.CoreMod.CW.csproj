@@ -72,6 +72,26 @@
         <Reference Include="$(MMHOOKManaged)MMHOOK_Assembly-CSharp.dll"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.32"/>
+    </ItemGroup>
+
+    <Target Name="ILRepacker" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
+        <ItemGroup>
+            <InputAssemblies Include="$(TargetPath)"/>
+            <InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Hamunii.UnityModMenuAPI'" />
+        </ItemGroup>
+
+        <ILRepack
+            AllowDuplicateResources="false"
+            DebugInfo="true"
+            Internalize="true"
+            InputAssemblies="@(InputAssemblies)"
+            OutputFile="$(PluginsDirectory)Hamunii.UnityModMenuAPI.CoreBundle.dll.NetRx"
+            Parallel="true"
+            TargetKind="SameAsPrimaryAssembly" />
+    </Target>
+
     <!-- Build our Thunderstore package when making a release build. This does not publish our package. -->
     <!-- For more information about tcli, see https://github.com/thunderstore-io/thunderstore-cli/wiki -->
     <Target Name="PackThunderstore" AfterTargets="PostBuildEvent" Condition="$(Configuration) == 'Release'">

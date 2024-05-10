@@ -4,40 +4,72 @@ using UnityModMenuAPI.MenuGUI;
 using UnityEngine;
 using MonoMod.RuntimeDetour.HookGen;
 using System.Reflection;
+using UnityModMenuAPI.ModMenuItems;
+using UnityModMenuAPI.NetRxLoader;
+using CoreModCW.CorePatches;
 
 namespace UnityModMenuAPI;
-
+#if !DEBUG
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
-internal class Plugin : BaseUnityPlugin
+internal class BepPlugin : BaseUnityPlugin
 {
-    public static Plugin Instance { get; private set; } = null!;
-    internal new static ManualLogSource Logger { get; private set; } = null!;
-    internal static GameObject myGUIObject = null!;
     private void Awake()
     {
-        Logger = base.Logger;
-        Instance = this;
+        Plugin.Logger = base.Logger;
+        Plugin.Logger.LogInfo($"{MyPluginInfo.PLUGIN_GUID} v{MyPluginInfo.PLUGIN_VERSION} has loaded!");
 
-#if DEBUG && false // BepInEx ScriptEngine doesn't play well with dependencies that are also supposed to be live reloaded.
-        DebugActions.Init();
-#endif
+// #if DEBUG && false // BepInEx ScriptEngine doesn't play well with dependencies that are also supposed to be live reloaded.
+//         DebugLCActions.Init();
+// #endif
+// #if DEBUG && false
+//         CoreModCW.CorePatches.DebugCW.Init();
+// #endif
 
-        InitializeGUI();
+        Plugin.InitializeGUI();
 
-        Logger.LogInfo($"{MyPluginInfo.PLUGIN_GUID} v{MyPluginInfo.PLUGIN_VERSION} has loaded!");
     }
 
     private void OnDestroy()
     {
         HookEndpointManager.RemoveAllOwnedBy(Assembly.GetExecutingAssembly());
-        Destroy(myGUIObject);
+        ModMenu.RemoveAllOwnedBy(Assembly.GetExecutingAssembly());
+        Destroy(Plugin.myGUIObject);
     }
 
-    static void InitializeGUI(){
+    
+}
+#else
+internal class NetRxPlugin : IHotLoadManagerID0
+{
+    public void OnLoad()
+    {
+        Plugin.Logger = BepInEx.Logging.Logger.CreateLogSource(MyPluginInfo.PLUGIN_GUID);
+        Plugin.Logger.LogInfo($"{MyPluginInfo.PLUGIN_GUID} v{MyPluginInfo.PLUGIN_VERSION} has loaded via NetRx!");
+
+        Plugin.InitializeGUI();
+
+        // DebugCW.Init();
+    }
+
+    public void Dispose()
+    {
+        HookEndpointManager.RemoveAllOwnedBy(Assembly.GetExecutingAssembly());
+        // ModMenu.RemoveAllOwnedBy(Assembly.GetExecutingAssembly());
+
+        Object.Destroy(Plugin.myGUIObject);
+    }
+}
+#endif
+
+internal class Plugin
+{
+    internal static ManualLogSource Logger { get; set; } = null!;
+    internal static GameObject myGUIObject = null!;
+    internal static void InitializeGUI(){
         ModMenuGUI.canOpenDevToolsMenu = true;
         if(!ModMenuGUI.menuExists){
             myGUIObject = new GameObject("UnityModMenuAPI_GUI");
-            UnityEngine.Object.DontDestroyOnLoad(myGUIObject);
+            Object.DontDestroyOnLoad(myGUIObject);
             myGUIObject.hideFlags = HideFlags.HideAndDontSave;
             myGUIObject.AddComponent<ModMenuGUI>();
             ModMenuGUI.menuExists = true;

@@ -32,7 +32,7 @@ public class ModMenuItemMetadata
     {
         Name = itemName;
         if(tooltip is not null)
-            ToolTip = tooltip;
+            Tooltip = tooltip;
     }
     public ModMenuItemMetadata(string itemName)
         : this(itemName, null) { }
@@ -43,7 +43,7 @@ public class ModMenuItemMetadata
     /// <summary>
     /// The tooltip for your menu item. Shown when hovering on the item. 
     /// </summary>
-    public string? ToolTip;
+    public string? Tooltip;
     /// <summary>
     /// The permission visibility for this menu item. If permission isn't met, this menu item will be hidden.
     /// </summary>
@@ -57,6 +57,6 @@ public class ModMenuItemMetadata
 public enum ModMenuItemType
 {
     ActionButton,
-    ActionButtonMultiple,
+    ContextMenu,
     ToggleButton
 }

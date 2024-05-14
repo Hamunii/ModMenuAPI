@@ -1,0 +1,23 @@
+<Project>
+    <PropertyGroup>
+        <PackageId>Hamunii.ModMenuAPI</PackageId>
+        <Title>ModMenuAPI</Title>
+        <Authors>Hamunii</Authors>
+        <PackageTags>BepInEx</PackageTags>
+
+        <PackageIcon>icon_128x128.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+
+        <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
+
+        <PackageProjectUrl>https://github.com/Hamunii/ModMenuAPI</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Hamunii/ModMenuAPI</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+    </PropertyGroup>
+
+    <!-- NuPkg Includes -->
+    <ItemGroup>
+        <None Include="$(ProjectDir)../README.md" Pack="true" PackagePath="/" />
+        <None Include="$(ProjectDir)Thunderstore/icon_128x128.png" Pack="true" PackagePath="/" />
+    </ItemGroup>
+</Project>

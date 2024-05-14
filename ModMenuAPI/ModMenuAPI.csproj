@@ -1,4 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
+    <Import Project="./ModMenuAPI.Packaging.targets" />
     <!-- BepInEx Properties -->
     <PropertyGroup>
         <AssemblyName>Hamunii.ModMenuAPI</AssemblyName>

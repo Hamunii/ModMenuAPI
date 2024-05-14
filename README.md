@@ -3,6 +3,10 @@
 > [!NOTE]  
 > This API is not quite yet released.
 
+[![GitHub Build Status](https://img.shields.io/github/actions/workflow/status/Hamunii/ModMenuAPI/build.yml?style=for-the-badge&logo=github)](https://github.com/Hamunii/ModMenuAPI/blob/main/.github/workflows/build.yml)
+[![Thunderstore Version](https://img.shields.io/thunderstore/v/Hamunii/ModMenuAPI?style=for-the-badge&logo=thunderstore&logoColor=white)](https://thunderstore.io/c/lethal-company/p/Hamunii/ModMenuAPI/)
+[![NuGet Version](https://img.shields.io/nuget/v/Hamunii.ModMenuAPI?style=for-the-badge&logo=nuget)](https://www.nuget.org/packages/Hamunii.ModMenuAPI)
+
 An API to add your stuff as buttons on a menu that is accessible during gameplay.
 
 ### Support

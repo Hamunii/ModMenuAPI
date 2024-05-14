@@ -1,11 +1,11 @@
-# UnityModMenuAPI
+# ModMenuAPI
 
 An API to add your stuff as buttons on a menu that is accessible during gameplay.
 
 ### Usage
 
 ```cs
-using UnityModMenuAPI.ModMenuItems;
+using ModMenuAPI.ModMenuItems;
 
 class CWPatches
 {

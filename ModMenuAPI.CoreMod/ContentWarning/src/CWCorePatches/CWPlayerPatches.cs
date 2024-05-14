@@ -16,7 +16,7 @@ class CWPlayerPatches
 
 class InfiniteJumpPatch : ModMenuButtonToggleBase
 {
-    readonly ModMenuItemMetadata meta = new("Infinite Jumpt", "Removes check for touching ground when jumping.");
+    readonly ModMenuItemMetadata meta = new("Infinite Jump", "Removes check for touching ground when jumping.");
     public override ModMenuItemMetadata Metadata => meta;
     protected override void OnEnable() { IL.PlayerController.TryJump += PlayerController_TryJump; }
     protected override void OnDisable() { IL.PlayerController.TryJump -= PlayerController_TryJump; }

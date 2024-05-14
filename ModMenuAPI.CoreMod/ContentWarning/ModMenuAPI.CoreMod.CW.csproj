@@ -81,6 +81,7 @@
         <ItemGroup>
             <InputAssemblies Include="$(TargetPath)"/>
             <InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Hamunii.ModMenuAPI'" />
+            <LibraryPath Include="%(ReferencePathWithRefAssemblies.RelativeDir)" />
         </ItemGroup>
 
         <ILRepack
@@ -88,7 +89,8 @@
             DebugInfo="true"
             Internalize="true"
             InputAssemblies="@(InputAssemblies)"
-            OutputFile="$(PluginsDirectory)../scripts/Hamunii.ModMenuAPI.CoreBundle.CW.dll.NetRx"
+            LibraryPath="@(LibraryPath)"
+            OutputFile="$(PluginsDirectory)../scripts/Hamunii.ModMenuAPI.CoreBundle.CW.dll"
             Parallel="true"
             TargetKind="SameAsPrimaryAssembly" />
     </Target>

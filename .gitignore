@@ -47,3 +47,5 @@ UpgradeLog.htm
 
 # Thunderstore packages
 **/Thunderstore/Packages
+
+!*template.csproj.user

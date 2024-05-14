@@ -75,7 +75,8 @@
     <ItemGroup>
         <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.32"/>
     </ItemGroup>
-
+    <!-- The only way I know of to live reload multiple assemblies when one of them
+            is a dependency for the other, is to make them a single assembly. -->
     <Target Name="ILRepacker" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
         <ItemGroup>
             <InputAssemblies Include="$(TargetPath)"/>
@@ -87,7 +88,7 @@
             DebugInfo="true"
             Internalize="true"
             InputAssemblies="@(InputAssemblies)"
-            OutputFile="$(PluginsDirectory)Hamunii.ModMenuAPI.CoreBundle.dll.NetRx"
+            OutputFile="$(PluginsDirectory)../scripts/Hamunii.ModMenuAPI.CoreBundle.CW.dll.NetRx"
             Parallel="true"
             TargetKind="SameAsPrimaryAssembly" />
     </Target>

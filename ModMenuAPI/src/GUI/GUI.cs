@@ -33,7 +33,6 @@ internal class ModMenuGUI : MonoBehaviour
     internal static bool DevToolsMenuOpen = false;
     internal static bool canOpenDevToolsMenu = true;
     public static List<ModMenuBaseItemBase> menuMethods = new();
-    public static List<ModMenuMenuItem> ModMenus = new();
     internal static bool menuExists = false;    
     private void Awake()
     {
@@ -121,7 +120,7 @@ internal class ModMenuGUI : MonoBehaviour
         if(!canOpenDevToolsMenu) { return; }
         if(!DevToolsMenuOpen) return;
         int menuIdx = 0;
-        foreach (var menu in ModMenus)
+        foreach (var menu in ModMenu.ModMenus)
         {
             // Plugin.Logger.LogInfo("Drawing " + menu.MenuTitle);
             DrawMenu(ref menuIdx, menu);

@@ -24,7 +24,7 @@ jobs:
       - name: Restore Solution
         run: |
           dotnet restore ModMenuAPI
-          dotnet tool restore ModMenuAPI
+          dotnet tool restore --tool-manifest ./ModMenuAPI/.config/dotnet-tools.json
 
       - name: Pack Solution
         run: |

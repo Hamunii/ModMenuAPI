@@ -7,21 +7,21 @@ An API to add your stuff as buttons on a menu that is accessible during gameplay
 
 ### Support
 
-| Game Engine  | Supported? |
-|--------------|-----|
-| Unity Mono   | Yes |
-| Unity IL2CPP | No  |
-| *Other*      | No  |
+| Engine       | Supported? |
+|--------------|----|
+| Unity Mono   | ✅ |
+| Unity IL2CPP | ❌ |
+| *Other*      | ❌ |
 
 | Modloader    | Supported? |
-|--------------|-----|
-| BepInEx 5    | Yes |
-| *Other*      | No  |
+|--------------|----|
+| BepInEx 5    | ✅ |
+| *Other*      | ❌ |
 
 #### Games with mods using this API
 
 | Game | Mods |
-|-------|-|
+|------|------|
 | Lethal Company | [ModMenuAPI.CoreMod.LC](/ModMenuAPI.CoreMod/LethalCompany/) |
 | Content Warning | [ModMenuAPI.CoreMod.CW](/ModMenuAPI.CoreMod/ContentWarning/) |
 

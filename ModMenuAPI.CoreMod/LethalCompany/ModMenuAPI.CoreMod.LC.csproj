@@ -70,8 +70,12 @@
 
     <!-- References - HookGen Assemblies -->
     <ItemGroup>
-        <Reference Include="$(MMHOOKManaged)MMHOOK_Assembly-CSharp.dll"/>
+        <Reference Include="$(MSBuildThisFileDirectory)lib/MMHOOK_Assembly-CSharp.dll"/>
     </ItemGroup>
+
+    <Target Name="CopyMMHOOK" AfterTargets="PreBuildEvent" Condition="$(CI) != 'true'">
+        <Copy SourceFiles="$(MMHOOKManaged)MMHOOK_Assembly-CSharp.dll" DestinationFolder="./lib" SkipUnchangedFiles="true"/>
+    </Target>
 
     <!-- Build our Thunderstore package when making a release build. This does not publish our package. -->
     <!-- For more information about tcli, see https://github.com/thunderstore-io/thunderstore-cli/wiki -->

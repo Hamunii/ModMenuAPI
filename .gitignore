@@ -47,4 +47,6 @@ UpgradeLog.htm
 # Thunderstore packages
 **/Thunderstore/Packages
 
+# Exclusions
 !*template.csproj.user
+!**/lib/MMHOOK_*

@@ -45,7 +45,7 @@ public abstract class ModMenuButtonContextMenuBase : ModMenuBaseItemBase
 public class ModMenuButtonContextMenuInstantiable : ModMenuButtonContextMenuBase
 {
     private readonly List<ModMenuBaseItemBase> _menuItems = null!;
-    private readonly ModMenuItemMetadata _metadata = null!;
+    private readonly ModMenuItemMetadata _metadata = new("New Context Menu");
 
     public ModMenuButtonContextMenuInstantiable(ModMenuItemMetadata metadata, List<ModMenuBaseItemBase>? modMenuItems)
     {
@@ -110,4 +110,23 @@ public abstract class ModMenuButtonToggleBase : ModMenuBaseItemBase
             case false: Enabled = true; break;
         }
     }
+}
+
+/// <summary>
+/// A basic toggle button. Use <c>Enabled</c> to get the state of the button.
+/// </summary>
+public class ModMenuButtonToggleInstantiable : ModMenuButtonToggleBase
+{
+    private readonly ModMenuItemMetadata _metadata = new("New Toggle Button");
+
+    public ModMenuButtonToggleInstantiable(ModMenuItemMetadata metadata)
+    {
+        _metadata = metadata;
+    }
+    public ModMenuButtonToggleInstantiable(string itemName)
+        : this(new ModMenuItemMetadata(itemName)) { }
+
+    public override ModMenuItemMetadata Metadata => _metadata;
+    protected override void OnDisable() { }
+    protected override void OnEnable() { }
 }

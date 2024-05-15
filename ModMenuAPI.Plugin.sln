@@ -5,11 +5,11 @@ VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModMenuAPI/ModMenuAPI", "ModMenuAPI\ModMenuAPI.csproj", "{78FAE889-3F35-4A76-9B19-73DA0E68555A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ModMenuAPI.CoreMod", "ModMenuAPI.CoreMod", "{CD9A22F6-0BBF-4001-B5AB-A7D66739BC9A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ModMenuAPI.Plugin", "ModMenuAPI.Plugin", "{CD9A22F6-0BBF-4001-B5AB-A7D66739BC9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModMenuAPI.CoreMod.CW", "ModMenuAPI.CoreMod\ContentWarning\ModMenuAPI.CoreMod.CW.csproj", "{4EC8EBD5-DD02-48BC-9487-ADB19C116238}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModMenuAPI.Plugin.CW", "ModMenuAPI.Plugin\ContentWarning\ModMenuAPI.Plugin.CW.csproj", "{4EC8EBD5-DD02-48BC-9487-ADB19C116238}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModMenuAPI.CoreMod.LC", "ModMenuAPI.CoreMod\LethalCompany\ModMenuAPI.CoreMod.LC.csproj", "{0F9CAB06-32FA-4357-8968-CFA4997C9E22}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModMenuAPI.Plugin.LC", "ModMenuAPI.Plugin\LethalCompany\ModMenuAPI.Plugin.LC.csproj", "{0F9CAB06-32FA-4357-8968-CFA4997C9E22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

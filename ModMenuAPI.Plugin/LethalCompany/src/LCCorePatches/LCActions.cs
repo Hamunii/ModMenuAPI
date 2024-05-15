@@ -1,7 +1,7 @@
 using UnityEngine;
 using ModMenuAPI.ModMenuItems;
 
-namespace CoreModLC.CorePatches;
+namespace PluginLC.CorePatches;
 
 class LCActionPatches
 {

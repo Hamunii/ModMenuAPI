@@ -26,8 +26,8 @@ An API to add your stuff as buttons on a menu that is accessible during gameplay
 
 | Game | Mods |
 |------|------|
-| Lethal Company | [ModMenuAPI.CoreMod.LC](/ModMenuAPI.CoreMod/LethalCompany/) |
-| Content Warning | [ModMenuAPI.CoreMod.CW](/ModMenuAPI.CoreMod/ContentWarning/) |
+| Lethal Company | [ModMenuAPI.Plugin.LC](/ModMenuAPI.Plugin/LethalCompany/) |
+| Content Warning | [ModMenuAPI.Plugin.CW](/ModMenuAPI.Plugin/ContentWarning/) |
 
 ### Usage
 

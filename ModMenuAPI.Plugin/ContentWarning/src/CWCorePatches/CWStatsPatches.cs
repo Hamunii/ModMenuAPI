@@ -1,6 +1,6 @@
 using ModMenuAPI.ModMenuItems;
 
-namespace CoreModCW.CorePatches;
+namespace PluginCW.CorePatches;
 
 class CWStatsPatches
 {

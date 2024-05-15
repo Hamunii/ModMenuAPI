@@ -21,7 +21,7 @@ source = "./CW_CHANGELOG.md"
 target = "/CHANGELOG.md"
 
 [[build.copy]]
-source = "../bin/Release/netstandard2.1/Hamunii.ModMenuAPI.CoreMod.CW.dll"
+source = "../bin/Release/netstandard2.1/Hamunii.ModMenuAPI.Plugin.CW.dll"
 target = "/BepInEx/plugins/"
 
 [publish]

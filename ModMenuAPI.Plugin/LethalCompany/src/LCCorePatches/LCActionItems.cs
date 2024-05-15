@@ -5,7 +5,7 @@ using UnityEngine;
 using ModMenuAPI.ModMenuItems;
 using ModMenuAPI.ModMenuItems.BaseItems;
 
-namespace CoreModLC.CorePatches;
+namespace PluginLC.CorePatches;
 
 class LCActionEnemy
 {

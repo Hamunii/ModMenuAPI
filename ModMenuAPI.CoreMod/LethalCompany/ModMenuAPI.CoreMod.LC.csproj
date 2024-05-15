@@ -77,6 +77,29 @@
         <Copy SourceFiles="$(MMHOOKManaged)MMHOOK_Assembly-CSharp.dll" DestinationFolder="./lib" SkipUnchangedFiles="true"/>
     </Target>
 
+    <ItemGroup>
+        <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.32"/>
+    </ItemGroup>
+    <!-- The only way I know of to live reload multiple assemblies when one of them
+            is a dependency for the other, is to make them a single assembly. -->
+    <Target Name="ILRepacker" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
+        <ItemGroup>
+            <InputAssemblies Include="$(TargetPath)"/>
+            <InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Hamunii.ModMenuAPI'" />
+            <LibraryPath Include="%(ReferencePathWithRefAssemblies.RelativeDir)" />
+        </ItemGroup>
+
+        <ILRepack
+            AllowDuplicateResources="false"
+            DebugInfo="true"
+            Internalize="true"
+            InputAssemblies="@(InputAssemblies)"
+            LibraryPath="@(LibraryPath)"
+            OutputFile="$(PluginsDirectory)../scripts/Hamunii.ModMenuAPI.CoreBundle.LC.dll"
+            Parallel="true"
+            TargetKind="SameAsPrimaryAssembly" />
+    </Target>
+
     <!-- Build our Thunderstore package when making a release build. This does not publish our package. -->
     <!-- For more information about tcli, see https://github.com/thunderstore-io/thunderstore-cli/wiki -->
     <Target Name="PackThunderstore" AfterTargets="PostBuildEvent" Condition="$(Configuration) == 'Release'">

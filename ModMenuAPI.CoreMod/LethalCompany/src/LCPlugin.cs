@@ -17,17 +17,23 @@ internal class Plugin : BaseUnityPlugin
         Logger = base.Logger;
         Instance = this;
 
+#if DEBUG
+        ModMenuAPI.HotLoadPlugin.OnLoad();
+#endif
+        Logger.LogInfo($"{MyPluginInfo.PLUGIN_GUID} v{MyPluginInfo.PLUGIN_VERSION} has loaded!");
+
         LCMiscPatches.Init();
         LCPlayerPatches.Init();
         LCActionPatches.Init();
         LCActionEnemy.Init();
-        
-        Logger.LogInfo($"{MyPluginInfo.PLUGIN_GUID} v{MyPluginInfo.PLUGIN_VERSION} has loaded!");
     }
 
     private void OnDestroy()
     {
         HookEndpointManager.RemoveAllOwnedBy(Assembly.GetExecutingAssembly());
         ModMenu.RemoveAllOwnedBy(Assembly.GetExecutingAssembly());
+#if DEBUG
+        ModMenuAPI.HotLoadPlugin.Dispose();
+#endif
     }
 }

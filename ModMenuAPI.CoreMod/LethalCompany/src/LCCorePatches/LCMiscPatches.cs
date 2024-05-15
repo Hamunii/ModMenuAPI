@@ -16,6 +16,8 @@ class LCMiscPatches
     {
         ModMenu.RegisterItem(new IsEditorPatch(), menuMisc);
         ModMenu.RegisterItem(new InfiniteCreditsPatch(), menuMisc);
+        ModMenu.RegisterItem(new PullLeverAction(), menuMisc);
+        ModMenu.RegisterItem(new MeetQuotaPatch(), menuMisc);
     }
 }
 
@@ -55,5 +57,63 @@ internal class InfiniteCreditsPatch : ModMenuButtonToggleBase
     {
         self.groupCredits = 100000000;
         orig(self, node);
+    }
+}
+
+internal class PullLeverAction : ModMenuButtonActionBase
+{
+    readonly ModMenuItemMetadata meta = new("Pull Lever");
+    public override ModMenuItemMetadata Metadata => meta;
+
+    internal PullLeverAction()
+    {
+        On.StartMatchLever.Start += StartMatchLever_Start;
+    }
+    private static void StartMatchLever_Start(On.StartMatchLever.orig_Start orig, StartMatchLever self)
+    {
+        Plugin.Logger.LogInfo("Got Lever instance!");
+        lever = self;
+        orig(self);
+    }
+
+    static StartMatchLever? lever = null;
+    public override void OnClick()
+    {
+        if(lever is null)
+        {
+            Plugin.Logger.LogInfo("Lever was null!");
+            On.StartMatchLever.Update += StartMatchLever_Update;
+        }
+        else
+        {
+            lever.PullLeverAnim(StartOfRound.Instance.inShipPhase);
+            lever.PullLever();
+        }
+    }
+
+    private void StartMatchLever_Update(On.StartMatchLever.orig_Update orig, StartMatchLever self)
+    {
+        lever = self;
+        orig(self);
+        On.StartMatchLever.Update -= StartMatchLever_Update;
+        CommonInvoke();
+    }
+}
+
+internal class MeetQuotaPatch : ModMenuButtonToggleBase
+{
+    readonly ModMenuItemMetadata meta = new("Force Meet Quota");
+    public override ModMenuItemMetadata Metadata => meta;
+
+    protected override void OnEnable() => On.StartOfRound.EndOfGame += StartOfRound_EndOfGame;
+    protected override void OnDisable() => On.StartOfRound.EndOfGame -= StartOfRound_EndOfGame;
+
+    private static IEnumerator StartOfRound_EndOfGame(On.StartOfRound.orig_EndOfGame orig, StartOfRound self, int bodiesInsured, int connectedPlayersOnServer, int scrapCollected)
+    {
+        TimeOfDay.Instance.quotaFulfilled = TimeOfDay.Instance.profitQuota;
+
+        var origIE = orig(self,bodiesInsured,connectedPlayersOnServer,scrapCollected);
+        while(origIE.MoveNext())
+            yield return origIE.Current;
     }
 }

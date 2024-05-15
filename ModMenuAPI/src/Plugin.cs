@@ -1,9 +1,7 @@
-using BepInEx;
 using UnityEngine;
 using MonoMod.RuntimeDetour.HookGen;
 using System.Reflection;
 using ModMenuAPI.MenuGUI;
-using System;
 using ModMenuAPI.ModMenuItems;
 
 namespace ModMenuAPI;
@@ -20,6 +18,10 @@ internal class BepPlugin : BaseUnityPlugin
     private void OnDestroy() => Plugin.Dispose();
 }
 #else
+/// <summary>
+/// This is managed by the other mod that is used in combination with this API.<br/>
+/// This is a way to get around load order issue and having 2 plugins in one assembly (hot loading issues).
+/// </summary>
 public static class HotLoadPlugin
 {
     public static void OnLoad()

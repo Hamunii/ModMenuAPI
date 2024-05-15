@@ -22,12 +22,15 @@ An API to add your stuff as buttons on a menu that is accessible during gameplay
 | BepInEx 5    | ✅ |
 | *Other*      | ❌ |
 
-#### Games with mods using this API
+#### Mods using this API
 
-| Game | Mods |
+> [!NOTE]  
+> First-party mods using this API are found in the [ModMenuAPI.Plugin](https://github.com/Hamunii/ModMenuAPI.Plugin) repository.
+
+| Game | Mod |
 |------|------|
-| Lethal Company | [ModMenuAPI.Plugin.LC](/ModMenuAPI.Plugin/LethalCompany/) |
-| Content Warning | [ModMenuAPI.Plugin.CW](/ModMenuAPI.Plugin/ContentWarning/) |
+| Lethal Company | [ModMenuAPI.Plugin.LC](https://github.com/Hamunii/ModMenuAPI.Plugin) |
+| Content Warning | [ModMenuAPI.Plugin.CW](https://github.com/Hamunii/ModMenuAPI.Plugin) |
 
 ### Usage
 

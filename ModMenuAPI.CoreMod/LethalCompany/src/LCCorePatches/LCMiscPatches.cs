@@ -6,18 +6,62 @@ using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
 using UnityEngine;
 using ModMenuAPI.ModMenuItems;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CoreModLC.CorePatches;
 
 class LCMiscPatches
 {
     const string menuMisc = "Misc";
+    internal static ModMenuButtonContextMenuInstantiable weatherOverridesMenu = new("Weather Override >");
     internal static void Init()
     {
         ModMenu.RegisterItem(new IsEditorPatch(), menuMisc);
         ModMenu.RegisterItem(new InfiniteCreditsPatch(), menuMisc);
         ModMenu.RegisterItem(new PullLeverAction(), menuMisc);
         ModMenu.RegisterItem(new MeetQuotaPatch(), menuMisc);
+        ModMenu.RegisterItem(weatherOverridesMenu, menuMisc);
+
+        if(StartOfRound.Instance is not null)
+        {
+            PopulateWeatherOverrides();
+        }
+        On.StartOfRound.Start += StartOfRound_Start;
+    }
+
+    private static void StartOfRound_Start(On.StartOfRound.orig_Start orig, StartOfRound self)
+    {
+        orig(self);
+        PopulateWeatherOverrides();
+    }
+
+    internal static void SetWeatherOverride()
+    {
+        if(WeatherOverride.currentOverride is null || StartOfRound.Instance is null)
+            return;
+
+        List<SelectableLevel> levels = StartOfRound.Instance.levels.ToList();
+        for(var i = 0; i < levels.Count; i++ )
+        {
+            var level = levels[i];
+            level.currentWeather = WeatherOverride.currentOverride.WeatherType;
+        }
+    }
+
+    private static void PopulateWeatherOverrides()
+    {
+        List<LevelWeatherType> weathers = new(); 
+        foreach(var level in StartOfRound.Instance.levels)
+        {
+            foreach(var weather in level.randomWeathers)
+                weathers.Add(weather.weatherType);
+        }
+        weatherOverridesMenu.MenuItems.Clear();
+        foreach(var weather in weathers.Distinct().ToList())
+        {
+            weatherOverridesMenu.MenuItems.Add(new WeatherOverride(weather.ToString(), weather));
+        }
     }
 }
 
@@ -115,5 +159,30 @@ internal class MeetQuotaPatch : ModMenuButtonToggleBase
         var origIE = orig(self,bodiesInsured,connectedPlayersOnServer,scrapCollected);
         while(origIE.MoveNext())
             yield return origIE.Current;
+    }
+}
+
+class WeatherOverride : ModMenuButtonToggleBase
+{
+    internal static WeatherOverride? currentOverride;
+    internal readonly LevelWeatherType WeatherType;
+    internal WeatherOverride(string weatherName, LevelWeatherType weatherType)
+    {
+        meta = new(weatherName);
+        WeatherType = weatherType;
+    }
+    readonly ModMenuItemMetadata meta = new("Override <weather>");
+    public override ModMenuItemMetadata Metadata => meta;
+
+    protected override void OnEnable()
+    {
+        currentOverride?.CommonInvoke();
+        currentOverride = this;
+        LCMiscPatches.SetWeatherOverride();
+    }
+    protected override void OnDisable()
+    {
+        if(currentOverride == this)
+            currentOverride = null;
     }
 }

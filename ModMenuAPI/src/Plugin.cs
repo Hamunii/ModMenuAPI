@@ -3,6 +3,7 @@ using MonoMod.RuntimeDetour.HookGen;
 using System.Reflection;
 using ModMenuAPI.MenuGUI;
 using ModMenuAPI.ModMenuItems;
+using BepInEx; // Don't remove, used by non-debug version
 
 namespace ModMenuAPI;
 

@@ -76,7 +76,7 @@
         <Copy SourceFiles="$(MMHOOKManaged)MMHOOK_Assembly-CSharp.dll" DestinationFolder="./lib" SkipUnchangedFiles="true"/>
     </Target>
 
-    <ItemGroup>
+    <ItemGroup Condition="'$(Configuration)' == 'Debug'">
         <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.32"/>
     </ItemGroup>
     <!-- The only way I know of to live reload multiple assemblies when one of them

@@ -11,6 +11,10 @@ An API to add your stuff as buttons on a menu that is accessible during gameplay
 
 ### Support
 
+> [!TIP]  
+> Is your platform not supported? Open an issue, and let's discuss implementing it!
+> ModMenuAPI is very lightweight, and it isn't heavily tied to any platform.
+
 | Engine       | Supported? |
 |--------------|----|
 | Unity Mono   | ✅ |
@@ -32,7 +36,34 @@ An API to add your stuff as buttons on a menu that is accessible during gameplay
 | Lethal Company | [ModMenuAPI.Plugin.LC](https://github.com/Hamunii/ModMenuAPI.Plugin/releases) | [link](https://github.com/Hamunii/ModMenuAPI.Plugin/tree/main/ModMenuAPI.Plugin/LethalCompany/Thunderstore/LC_README.md) |
 | Content Warning | [ModMenuAPI.Plugin.CW](https://github.com/Hamunii/ModMenuAPI.Plugin/releases) | [link](https://github.com/Hamunii/ModMenuAPI.Plugin/tree/main/ModMenuAPI.Plugin/ContentWarning/Thunderstore/CW_README.md) |
 
-### Usage
+### Usage For Developers
+
+ModMenuAPI is used by registering menu items with `ModMenu.RegisterItem(MMItemBase menuItem, string menuTitle)`.
+
+The fundamental building block for each mod menu item is `MMItemBase`, but we have specialized buttons for certain behaviors. The menu items are as follows:
+- `MMButtonAction`
+- `MMButtonToggle`
+- `MMButtonToggleInstantiable`
+- `MMButtonContextMenu`
+- `MMButtonContextMenuInstantiable`
+
+The `Instantiable` versions are like dummy buttons that don't do anything special, but we can still access their states (`MMButtonToggle`'s `Enabled` value) or other data, like the `MMButtonContextMenu`'s `MenuItems` field.
+
+A context menu is just another menu, but opened by clicking a button. These are rather powerful, since a lot of options can be put under one, and it opens up much more possibilities despite the UI options being otherwise limited, like the current lack of text or number input fields.
+
+#### Getting Started
+
+ModMenuAPI is available on NuGet, and you can add the following package to your `csproj` file:
+
+> [!WARNING]  
+> There are no release builds yet! Consider using this only after a release build exists.
+```xml
+<ItemGroup>
+    <PackageReference Include="Hamunii.ModMenuAPI" Version="0.*-*" />
+</ItemGroup>
+```
+
+#### Usage Example
 
 ```cs
 using ModMenuAPI.ModMenuItems;
@@ -41,44 +72,31 @@ class CWPatches
 {
     internal static void Init()
     {
-        // menuTitle: The name of the menu this item will be listed under.
-        ModMenu.RegisterItem(new InfiniteJumpPatch(), menuTitle: "Player");
-        ModMenu.RegisterItem(new SetMoneyPatch(), menuTitle: "Stats");
+        // We register an item by giving an instance of a class that inherits MMItemBase
+        // and we define under what menu it should be listed under.
+        ModMenu.RegisterItem(new InfiniteJumpToggle(), "Player");
+        ModMenu.RegisterItem(new SetMoneyAction(), "Stats");
     }
 }
 
-// This is an example of a toggle button
-class InfiniteJumpPatch : ModMenuButtonToggle
+// We give the button's name and other optional metadata through the constructor
+class InfiniteJumpToggle() : MMButtonToggle("Infinite Jump")
 {
-    readonly ModMenuItemMetadata meta = new("Infinite Jump", "Removes check for touching ground when jumping.");
-    public override ModMenuItemMetadata Metadata => meta;
-
     protected override void OnEnable() => IL.PlayerController.TryJump += PlayerController_TryJump;
     protected override void OnDisable() => IL.PlayerController.TryJump -= PlayerController_TryJump;
 
     private static void PlayerController_TryJump(ILContext il)
     {
-        ILCursor c = new(il);
-        // we remove `if` branches and pop the values that would have been popped
-        while (c.TryGotoNext(x => x.MatchBgeUn(out _) || x.MatchBleUn(out _)))
-        {
-            c.Remove();
-            c.Emit(OpCodes.Pop);
-            c.Emit(OpCodes.Pop);
-        }
+        // logic here
     }
 }
 
 // This is an example of an action button - it isn't a toggle
-class SetMoneyPatch : ModMenuButtonAction
+class SetMoneyAction() : MMButtonAction("Set Money")
 {
-    readonly ModMenuItemMetadata meta = new("Set Money");
-    public override ModMenuItemMetadata Metadata => meta;
-
     public override void OnClick()
     {
-        SurfaceNetworkHandler.RoomStats.Money = 100000000;
-        SurfaceNetworkHandler.RoomStats.OnStatsUpdated();
+        // logic here
     }
 }
 ```
@@ -91,4 +109,4 @@ ModMenuAPI is designed to be modular and lightweight. This is because the goal o
 |-|-|
 | `ModMenuAPI` | The entry point of the software; handles loading and unloading itself so it plays well with hot loading. *This is the only modloader-specific part, and adding support for another modloader should be incredibly easy.* |
 | `ModMenuAPI.ModMenuItems` & `ModMenuAPI.ModMenuItems.BaseItems` | Contains the mod menu button components that are used, including the API methods used for registering buttons on the menu. |
-| `ModMenuAPI.MenuGUI` | Contains the graphical menu implementation, which currently is Unity's OnGUI. *A new implementation should be easy, as the most significant thing this does (other than the graphics) is invoke button presses using `ModMenuBaseItemBase`'s `CommonInvoke()`.* |
+| `ModMenuAPI.MenuGUI` | Contains the graphical menu implementation, which currently is Unity's OnGUI. *A new implementation should be easy, as the most significant thing this does (other than the graphics) is invoke button presses using `MMItemBase`'s `CommonInvoke()`.* |

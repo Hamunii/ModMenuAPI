@@ -27,10 +27,10 @@ An API to add your stuff as buttons on a menu that is accessible during gameplay
 > [!NOTE]  
 > First-party mods using this API are found in the [ModMenuAPI.Plugin](https://github.com/Hamunii/ModMenuAPI.Plugin) repository.
 
-| Game | Mod |
-|------|------|
-| Lethal Company | [ModMenuAPI.Plugin.LC](https://github.com/Hamunii/ModMenuAPI.Plugin) |
-| Content Warning | [ModMenuAPI.Plugin.CW](https://github.com/Hamunii/ModMenuAPI.Plugin) |
+| Game | Mod | Readme |
+|------|-----|--------|
+| Lethal Company | [ModMenuAPI.Plugin.LC](https://github.com/Hamunii/ModMenuAPI.Plugin/releases) | [link](https://github.com/Hamunii/ModMenuAPI.Plugin/tree/main/ModMenuAPI.Plugin/LethalCompany/Thunderstore/LC_README.md) |
+| Content Warning | [ModMenuAPI.Plugin.CW](https://github.com/Hamunii/ModMenuAPI.Plugin/releases) | [link](https://github.com/Hamunii/ModMenuAPI.Plugin/tree/main/ModMenuAPI.Plugin/ContentWarning/Thunderstore/CW_README.md) |
 
 ### Usage
 

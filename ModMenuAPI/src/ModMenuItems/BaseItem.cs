@@ -8,11 +8,15 @@ namespace ModMenuAPI.ModMenuItems.BaseItems;
 /// </summary>
 public abstract class ModMenuBaseItemBase
 {
-    internal ModMenuBaseItemBase()
+    public ModMenuBaseItemBase(string itemName) : this(new ModMenuItemMetadata(itemName)) { }
+    public ModMenuBaseItemBase(string itemName, string tooltip) : this(new ModMenuItemMetadata(itemName, tooltip)) { }
+    public ModMenuBaseItemBase(ModMenuItemMetadata metadata)
     {
+        Metadata = metadata;
         if (Metadata.InvokeOnInit)
             CommonInvoke();
     }
+
     /// <summary>
     /// The type of this menu item.
     /// </summary>
@@ -21,7 +25,7 @@ public abstract class ModMenuBaseItemBase
     /// <summary>
     /// The metadata for this menu item.
     /// </summary>
-    public abstract ModMenuItemMetadata Metadata { get; }
+    public readonly ModMenuItemMetadata Metadata;
 
     /// <summary>
     /// The common interface for clicking different types of buttons programmatically.

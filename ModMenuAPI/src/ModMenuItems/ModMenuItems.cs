@@ -8,6 +8,10 @@ namespace ModMenuAPI.ModMenuItems;
 /// </summary>
 public abstract class ModMenuButtonActionBase : ModMenuBaseItemBase
 {
+    protected ModMenuButtonActionBase(string itemName) : base(itemName) { }
+    protected ModMenuButtonActionBase(string itemName, string tooltip) : base(itemName, tooltip) { }
+    protected ModMenuButtonActionBase(ModMenuItemMetadata metadata) : base(metadata) { }
+
     internal override ModMenuItemType ItemType => ModMenuItemType.ActionButton;
 
     public abstract void OnClick();
@@ -26,8 +30,20 @@ public abstract class ModMenuButtonActionBase : ModMenuBaseItemBase
 /// </summary>
 public abstract class ModMenuButtonContextMenuBase : ModMenuBaseItemBase
 {
+    protected ModMenuButtonContextMenuBase(string itemName) : this(new ModMenuItemMetadata(itemName), new()) { }
+    protected ModMenuButtonContextMenuBase(string itemName, List<ModMenuBaseItemBase> menuItems) : this(new ModMenuItemMetadata(itemName), menuItems) { }
+
+    protected ModMenuButtonContextMenuBase(string itemName, string tooltip) : this(new ModMenuItemMetadata(itemName, tooltip), new()) { }
+    protected ModMenuButtonContextMenuBase(string itemName, string tooltip, List<ModMenuBaseItemBase> menuItems) : this(new ModMenuItemMetadata(itemName, tooltip), menuItems) { }
+    
+    protected ModMenuButtonContextMenuBase(ModMenuItemMetadata metadata) : this(metadata, new()) { }
+    protected ModMenuButtonContextMenuBase(ModMenuItemMetadata metadata, List<ModMenuBaseItemBase> menuItems) : base(metadata)
+    {
+        MenuItems = menuItems;
+    }
+
     internal override ModMenuItemType ItemType => ModMenuItemType.ContextMenu;
-    public abstract List<ModMenuBaseItemBase> MenuItems { get; }
+    public readonly List<ModMenuBaseItemBase> MenuItems;
     public abstract void OnMenuOpened();
     public abstract void OnMenuClosed();
     public override void CommonInvoke()
@@ -44,23 +60,15 @@ public abstract class ModMenuButtonContextMenuBase : ModMenuBaseItemBase
 /// </summary>
 public class ModMenuButtonContextMenuInstantiable : ModMenuButtonContextMenuBase
 {
-    private readonly List<ModMenuBaseItemBase> _menuItems = null!;
-    private readonly ModMenuItemMetadata _metadata = new("New Context Menu");
+    public ModMenuButtonContextMenuInstantiable(string itemName) : base(itemName) { }
+    public ModMenuButtonContextMenuInstantiable(string itemName, List<ModMenuBaseItemBase> menuItems) : base(itemName, menuItems) { }
 
-    public ModMenuButtonContextMenuInstantiable(ModMenuItemMetadata metadata, List<ModMenuBaseItemBase>? modMenuItems)
-    {
-        _metadata = metadata;
-        _menuItems = modMenuItems ?? new();
-    }
-    public ModMenuButtonContextMenuInstantiable(ModMenuItemMetadata meta)
-        : this(meta, null) { }
-    public ModMenuButtonContextMenuInstantiable(string menuName, List<ModMenuBaseItemBase>? modMenuItems)
-        : this(new ModMenuItemMetadata(menuName), modMenuItems) { }
-    public ModMenuButtonContextMenuInstantiable(string menuName)
-        : this(new ModMenuItemMetadata(menuName), null) { }
+    public ModMenuButtonContextMenuInstantiable(string itemName, string tooltip) : base(itemName, tooltip) { }
+    public ModMenuButtonContextMenuInstantiable(string itemName, string tooltip, List<ModMenuBaseItemBase> menuItems) : base(itemName, tooltip, menuItems) { }
+    
+    public ModMenuButtonContextMenuInstantiable(ModMenuItemMetadata metadata) : base(metadata) { }
+    public ModMenuButtonContextMenuInstantiable(ModMenuItemMetadata metadata, List<ModMenuBaseItemBase> menuItems) : base(metadata, menuItems) { }
 
-    public override List<ModMenuBaseItemBase> MenuItems => _menuItems;
-    public override ModMenuItemMetadata Metadata => _metadata;
     public override void OnMenuOpened() { }
     public override void OnMenuClosed() { }
 }
@@ -72,6 +80,11 @@ public abstract class ModMenuButtonToggleBase : ModMenuBaseItemBase
 {
     internal override ModMenuItemType ItemType => ModMenuItemType.ToggleButton;
     private bool _enabled = false;
+
+    protected ModMenuButtonToggleBase(string itemName) : base(itemName) { }
+    protected ModMenuButtonToggleBase(string itemName, string tooltip) : base(itemName, tooltip) { }
+    protected ModMenuButtonToggleBase(ModMenuItemMetadata metadata) : base(metadata) { }
+
     /// <summary>
     /// State of the patch.
     /// </summary>
@@ -117,16 +130,10 @@ public abstract class ModMenuButtonToggleBase : ModMenuBaseItemBase
 /// </summary>
 public class ModMenuButtonToggleInstantiable : ModMenuButtonToggleBase
 {
-    private readonly ModMenuItemMetadata _metadata = new("New Toggle Button");
+    public ModMenuButtonToggleInstantiable(string itemName) : base(itemName) { }
+    public ModMenuButtonToggleInstantiable(ModMenuItemMetadata metadata) : base(metadata) { }
+    public ModMenuButtonToggleInstantiable(string itemName, string tooltip) : base(itemName, tooltip) { }
 
-    public ModMenuButtonToggleInstantiable(ModMenuItemMetadata metadata)
-    {
-        _metadata = metadata;
-    }
-    public ModMenuButtonToggleInstantiable(string itemName)
-        : this(new ModMenuItemMetadata(itemName)) { }
-
-    public override ModMenuItemMetadata Metadata => _metadata;
     protected override void OnDisable() { }
     protected override void OnEnable() { }
 }

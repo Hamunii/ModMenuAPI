@@ -26,7 +26,7 @@ public static class ModMenu
     public static void RegisterItem(ModMenuBaseItemBase menuItem, string menuTitle)
     {
         menuItem.ParentAssembly = Assembly.GetCallingAssembly();
-        MMLog.Log($"V6 Adding item \"{menuItem.Metadata.Name}\" from assembly: " + menuItem.ParentAssembly.FullName);
+        MMLog.Log($"Adding item \"{menuItem.Metadata.Name}\" from assembly: " + menuItem.ParentAssembly.FullName);
 
         ModMenuMenuItem? menu = ModMenus.Find(x => x.MenuTitle.ToLower().Equals(menuTitle.ToLower()));
         if(menu is not null)

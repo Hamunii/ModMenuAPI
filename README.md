@@ -101,6 +101,15 @@ class SetMoneyAction() : MMButtonAction("Set Money")
 }
 ```
 
+### TODO
+
+**Priority:** First to last.
+- [ ] Macro/preset system (ability to invoke/toggle buttons on certain events)
+- [ ] Ability to toggle the UI on/off
+- [ ] Permission system management (e.g. host-only buttons)
+- [ ] Thunderstore release (must have permission system)
+- [ ] More menu item types (e.g. number input)
+
 ### ModMenuAPI Architecture
 
 ModMenuAPI is designed to be modular and lightweight. This is because the goal of this project is to be a generic mod menu API for any game.

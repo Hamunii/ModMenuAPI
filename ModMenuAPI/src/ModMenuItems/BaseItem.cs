@@ -6,11 +6,11 @@ namespace ModMenuAPI.ModMenuItems.BaseItems;
 /// A base class to derive from by menu item classes. <br/>
 /// Only use this if you are developing new button types for ModMenuAPI.
 /// </summary>
-public abstract class ModMenuBaseItemBase
+public abstract class MMItemBase
 {
-    public ModMenuBaseItemBase(string itemName) : this(new ModMenuItemMetadata(itemName)) { }
-    public ModMenuBaseItemBase(string itemName, string tooltip) : this(new ModMenuItemMetadata(itemName, tooltip)) { }
-    public ModMenuBaseItemBase(ModMenuItemMetadata metadata)
+    public MMItemBase(string itemName) : this(new MMItemMetadata(itemName)) { }
+    public MMItemBase(string itemName, string tooltip) : this(new MMItemMetadata(itemName, tooltip)) { }
+    public MMItemBase(MMItemMetadata metadata)
     {
         Metadata = metadata;
         if (Metadata.InvokeOnInit)
@@ -20,12 +20,12 @@ public abstract class ModMenuBaseItemBase
     /// <summary>
     /// The type of this menu item.
     /// </summary>
-    internal abstract ModMenuItemType ItemType { get; }
+    internal abstract MMItemType ItemType { get; }
 
     /// <summary>
     /// The metadata for this menu item.
     /// </summary>
-    public readonly ModMenuItemMetadata Metadata;
+    public readonly MMItemMetadata Metadata;
 
     /// <summary>
     /// The common interface for clicking different types of buttons programmatically.

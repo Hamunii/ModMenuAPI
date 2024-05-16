@@ -32,7 +32,7 @@ internal class ModMenuGUI : MonoBehaviour
     private Vector2 scrollPosition;
     internal static bool DevToolsMenuOpen = false;
     internal static bool canOpenDevToolsMenu = true;
-    public static List<ModMenuBaseItemBase> menuMethods = new();
+    public static List<MMItemBase> menuMethods = new();
     internal static bool menuExists = false;    
     private void Awake()
     {
@@ -109,7 +109,7 @@ internal class ModMenuGUI : MonoBehaviour
             GUI.skin.textArea.fontSize = 16;
         }
     }
-    static ModMenuButtonContextMenuBase? contextMenuOwner = null;
+    static MMButtonContextMenu? contextMenuOwner = null;
     static float contextMenuX = 0;
     static float contextMenuY = 0;
 
@@ -137,8 +137,8 @@ internal class ModMenuGUI : MonoBehaviour
         foreach (var menuItem in menu.MenuItems)
         {   
             GUIStyle? currentButtonStyle = null;
-            if (menuItem.ItemType == ModMenuItemType.ToggleButton)
-                currentButtonStyle = ((ModMenuButtonToggleBase)menuItem).Enabled ? toggleEnabledButtonStyle : toggleDisabledButtonStyle;
+            if (menuItem.ItemType == MMItemType.ToggleButton)
+                currentButtonStyle = ((MMButtonToggle)menuItem).Enabled ? toggleEnabledButtonStyle : toggleDisabledButtonStyle;
             else
                 currentButtonStyle = actionButtonStyle;
             if (contextMenuOwner is not null)
@@ -148,9 +148,9 @@ internal class ModMenuGUI : MonoBehaviour
             else if (GUI.Button(new Rect(CenterX + menuIdx * MenuWidth * 1.05f, MenuY + 30 + (ItemIdx * 30), ItemWidth, 30), $"{menuItem.Metadata.Name}", currentButtonStyle))
             {
                 menuItem.CommonInvoke();
-                if (menuItem.ItemType == ModMenuItemType.ContextMenu)
+                if (menuItem.ItemType == MMItemType.ContextMenu)
                 {
-                    contextMenuOwner = (ModMenuButtonContextMenuBase)menuItem;
+                    contextMenuOwner = (MMButtonContextMenu)menuItem;
                     contextMenuX = (menuIdx + 1) * MenuWidth * 1.05f;
                     contextMenuY = MenuY + (ItemIdx * 30);
                 }
@@ -172,8 +172,8 @@ internal class ModMenuGUI : MonoBehaviour
         foreach (var menuItem in contextMenuOwner.MenuItems)
         {   
             GUIStyle? currentButtonStyle = null;
-            if (menuItem.ItemType == ModMenuItemType.ToggleButton)
-                currentButtonStyle = ((ModMenuButtonToggleBase)menuItem).Enabled ? toggleEnabledButtonStyle : toggleDisabledButtonStyle;
+            if (menuItem.ItemType == MMItemType.ToggleButton)
+                currentButtonStyle = ((MMButtonToggle)menuItem).Enabled ? toggleEnabledButtonStyle : toggleDisabledButtonStyle;
             else
                 currentButtonStyle = actionButtonStyle;
             if (GUI.Button(new Rect(CenterX + contextMenuX, contextMenuY + 30 + (ItemIdx * 30), ItemWidth, 30), $"{menuItem.Metadata.Name}", currentButtonStyle))

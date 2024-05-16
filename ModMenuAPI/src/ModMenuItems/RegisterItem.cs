@@ -23,7 +23,7 @@ public static class ModMenu
     /// </summary>
     /// <param name="menuItem">The menu item to register.</param>
     /// <param name="menuTitle">The name of the menu this item will be listed under.</param>
-    public static void RegisterItem(ModMenuBaseItemBase menuItem, string menuTitle)
+    public static void RegisterItem(MMItemBase menuItem, string menuTitle)
     {
         menuItem.ParentAssembly = Assembly.GetCallingAssembly();
         MMLog.Log($"Adding item \"{menuItem.Metadata.Name}\" from assembly: " + menuItem.ParentAssembly.FullName);

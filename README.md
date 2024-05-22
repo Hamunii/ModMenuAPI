@@ -44,10 +44,10 @@ The fundamental building block for each mod menu item is `MMItemBase`, but we ha
 - `MMButtonAction`
 - `MMButtonToggle`
 - `MMButtonToggleInstantiable`
-- `MMButtonContextMenu`
-- `MMButtonContextMenuInstantiable`
+- `MMButtonMenu`
+- `MMButtonMenuInstantiable`
 
-The `Instantiable` versions are like dummy buttons that don't do anything special, but we can still access their states (`MMButtonToggle`'s `Enabled` value) or other data, like the `MMButtonContextMenu`'s `MenuItems` field.
+The `Instantiable` versions are like dummy buttons that don't do anything special, but we can still access their states (`MMButtonToggle`'s `Enabled` value) or other data, like the `MMButtonMenu`'s `MenuItems` field.
 
 A context menu is just another menu, but opened by clicking a button. These are rather powerful, since a lot of options can be put under one, and it opens up much more possibilities despite the UI options being otherwise limited, like the current lack of text or number input fields.
 

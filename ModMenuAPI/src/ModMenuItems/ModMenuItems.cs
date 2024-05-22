@@ -26,18 +26,18 @@ public abstract class MMButtonAction : MMItemBase
 
 /// <summary>
 /// A button which contains multiple action buttons after clicking. Interfaced by <c>OnMenuOpened</c> and <c>OnMenuClosed</c>.<br/>
-/// Consider using <c><see cref="MMButtonContextMenuInstantiable"/></c> if your context menu button doesn't need special behaviors.
+/// Consider using <c><see cref="MMButtonMenuInstantiable"/></c> if your context menu button doesn't need special behaviors.
 /// </summary>
-public abstract class MMButtonContextMenu : MMItemBase
+public abstract class MMButtonMenu : MMItemBase
 {
-    protected MMButtonContextMenu(string itemName) : this(new MMItemMetadata(itemName), new()) { }
-    protected MMButtonContextMenu(string itemName, List<MMItemBase> menuItems) : this(new MMItemMetadata(itemName), menuItems) { }
+    protected MMButtonMenu(string itemName) : this(new MMItemMetadata(itemName), new()) { }
+    protected MMButtonMenu(string itemName, List<MMItemBase> menuItems) : this(new MMItemMetadata(itemName), menuItems) { }
 
-    protected MMButtonContextMenu(string itemName, string tooltip) : this(new MMItemMetadata(itemName, tooltip), new()) { }
-    protected MMButtonContextMenu(string itemName, string tooltip, List<MMItemBase> menuItems) : this(new MMItemMetadata(itemName, tooltip), menuItems) { }
+    protected MMButtonMenu(string itemName, string tooltip) : this(new MMItemMetadata(itemName, tooltip), new()) { }
+    protected MMButtonMenu(string itemName, string tooltip, List<MMItemBase> menuItems) : this(new MMItemMetadata(itemName, tooltip), menuItems) { }
     
-    protected MMButtonContextMenu(MMItemMetadata metadata) : this(metadata, new()) { }
-    protected MMButtonContextMenu(MMItemMetadata metadata, List<MMItemBase> menuItems) : base(metadata)
+    protected MMButtonMenu(MMItemMetadata metadata) : this(metadata, new()) { }
+    protected MMButtonMenu(MMItemMetadata metadata, List<MMItemBase> menuItems) : base(metadata)
     {
         MenuItems = menuItems;
     }
@@ -58,16 +58,16 @@ public abstract class MMButtonContextMenu : MMItemBase
 /// <summary>
 /// A basic button that opens a context menu. Use <c>MenuItems</c> to manage the items this context menu contains.
 /// </summary>
-public class MMButtonContextMenuInstantiable : MMButtonContextMenu
+public class MMButtonMenuInstantiable : MMButtonMenu
 {
-    public MMButtonContextMenuInstantiable(string itemName) : base(itemName) { }
-    public MMButtonContextMenuInstantiable(string itemName, List<MMItemBase> menuItems) : base(itemName, menuItems) { }
+    public MMButtonMenuInstantiable(string itemName) : base(itemName) { }
+    public MMButtonMenuInstantiable(string itemName, List<MMItemBase> menuItems) : base(itemName, menuItems) { }
 
-    public MMButtonContextMenuInstantiable(string itemName, string tooltip) : base(itemName, tooltip) { }
-    public MMButtonContextMenuInstantiable(string itemName, string tooltip, List<MMItemBase> menuItems) : base(itemName, tooltip, menuItems) { }
+    public MMButtonMenuInstantiable(string itemName, string tooltip) : base(itemName, tooltip) { }
+    public MMButtonMenuInstantiable(string itemName, string tooltip, List<MMItemBase> menuItems) : base(itemName, tooltip, menuItems) { }
     
-    public MMButtonContextMenuInstantiable(MMItemMetadata metadata) : base(metadata) { }
-    public MMButtonContextMenuInstantiable(MMItemMetadata metadata, List<MMItemBase> menuItems) : base(metadata, menuItems) { }
+    public MMButtonMenuInstantiable(MMItemMetadata metadata) : base(metadata) { }
+    public MMButtonMenuInstantiable(MMItemMetadata metadata, List<MMItemBase> menuItems) : base(metadata, menuItems) { }
 
     public override void OnMenuOpened() { }
     public override void OnMenuClosed() { }

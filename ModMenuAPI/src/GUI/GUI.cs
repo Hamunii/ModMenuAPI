@@ -109,7 +109,7 @@ internal class ModMenuGUI : MonoBehaviour
             GUI.skin.textArea.fontSize = 16;
         }
     }
-    static MMButtonContextMenu? contextMenuOwner = null;
+    static MMButtonMenu? contextMenuOwner = null;
     static float contextMenuX = 0;
     static float contextMenuY = 0;
 
@@ -150,7 +150,7 @@ internal class ModMenuGUI : MonoBehaviour
                 menuItem.CommonInvoke();
                 if (menuItem.ItemType == MMItemType.ContextMenu)
                 {
-                    contextMenuOwner = (MMButtonContextMenu)menuItem;
+                    contextMenuOwner = (MMButtonMenu)menuItem;
                     contextMenuX = (menuIdx + 1) * MenuWidth * 1.05f;
                     contextMenuY = MenuY + (ItemIdx * 30);
                 }

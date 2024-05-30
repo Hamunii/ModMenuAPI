@@ -38,7 +38,9 @@ An API to add your stuff as buttons on a menu that is accessible during gameplay
 
 ### Usage For Developers
 
-ModMenuAPI is used by registering menu items with `ModMenu.RegisterItem(MMItemBase menuItem, string menuTitle)`.
+ModMenuAPI is used by registering menu items with an instance of `ModMenu(string menuTitle)`:  
+`public ModMenu RegisterItem(MMItemBase menuItem);` which this can be chained, or via a static method:  
+`public static MMItemBase ModMenu.RegisterItem(MMItemBase menuItem, string menuTitle)`.
 
 The fundamental building block for each mod menu item is `MMItemBase`, but we have specialized buttons for certain behaviors. The menu items are as follows:
 - `MMButtonAction`
@@ -49,7 +51,7 @@ The fundamental building block for each mod menu item is `MMItemBase`, but we ha
 
 The `Instantiable` versions are like dummy buttons that don't do anything special, but we can still access their states (`MMButtonToggle`'s `Enabled` value) or other data, like the `MMButtonMenu`'s `MenuItems` field.
 
-A context menu is just another menu, but opened by clicking a button. These are rather powerful, since a lot of options can be put under one, and it opens up much more possibilities despite the UI options being otherwise limited, like the current lack of text or number input fields.
+A menu button is just another submenu, but opened by clicking a button. These are rather powerful, since a lot of options can be put under one, and it opens up much more possibilities despite the UI options being otherwise limited, like the current lack of text or number input fields.
 
 #### Getting Started
 
@@ -72,10 +74,15 @@ class CWPatches
 {
     internal static void Init()
     {
-        // We register an item by giving an instance of a class that inherits MMItemBase
-        // and we define under what menu it should be listed under.
-        ModMenu.RegisterItem(new InfiniteJumpToggle(), "Player");
-        ModMenu.RegisterItem(new SetMoneyAction(), "Stats");
+        // This is the primary way of registering items, through an instance of `ModMenu`.
+        // We register an item with instance of a class that inherits MMItemBase.
+        new ModMenu("Player")
+            .RegisterItem(new InfiniteJumpToggle())
+            .RegisterItem(new SomeOtherToggle());
+
+        // Or alternatively, we can use the static method for registering items,
+        // which returns an instance of the `menuItem` instead of `ModMenu`
+        var buttonInstance = ModMenu.RegisterItem(new SetMoneyAction(), "Stats");
     }
 }
 

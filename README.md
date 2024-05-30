@@ -40,7 +40,7 @@ An API to add your stuff as buttons on a menu that is accessible during gameplay
 
 ModMenuAPI is used by registering menu items with an instance of `ModMenu(string menuTitle)`:  
 `public ModMenu RegisterItem(MMItemBase menuItem);` which this can be chained, or via a static method:  
-`public static MMItemBase ModMenu.RegisterItem(MMItemBase menuItem, string menuTitle)`.
+`public static T RegisterItem<T>(T menuItem, string menuTitle) where T : MMItemBase`.
 
 The fundamental building block for each mod menu item is `MMItemBase`, but we have specialized buttons for certain behaviors. The menu items are as follows:
 - `MMButtonAction`

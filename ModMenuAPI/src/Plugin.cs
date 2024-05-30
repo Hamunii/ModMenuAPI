@@ -8,7 +8,7 @@ using BepInEx; // Don't remove, used by non-debug version
 namespace ModMenuAPI;
 
 #if !DEBUG
-[BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
+[BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
 internal class BepPlugin : BaseUnityPlugin
 {
     private void Awake()
@@ -25,12 +25,14 @@ internal class BepPlugin : BaseUnityPlugin
 /// </summary>
 public static class HotLoadPlugin
 {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public static void OnLoad()
     {
-        MMLog.Logger = BepInEx.Logging.Logger.CreateLogSource(MyPluginInfo.PLUGIN_GUID);
+        MMLog.Logger = BepInEx.Logging.Logger.CreateLogSource(PluginInfo.PLUGIN_GUID);
         Plugin.OnLoad();
     }
     public static void Dispose() => Plugin.Dispose();
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }
 #endif
 
@@ -39,7 +41,7 @@ internal static class Plugin
     internal static GameObject myGUIObject = null!;
     internal static void OnLoad()
     {
-        MMLog.Log($"{MyPluginInfo.PLUGIN_GUID} v{MyPluginInfo.PLUGIN_VERSION} has loaded!");
+        MMLog.Log($"{PluginInfo.PLUGIN_GUID} v{PluginInfo.PLUGIN_VERSION} has loaded!");
 
         InitializeGUI();
     }

@@ -94,7 +94,7 @@ class InfiniteJumpToggle() : MMButtonToggle("Infinite Jump")
 // This is an example of an action button - it isn't a toggle
 class SetMoneyAction() : MMButtonAction("Set Money")
 {
-    public override void OnClick()
+    protected override void OnClick()
     {
         // logic here
     }

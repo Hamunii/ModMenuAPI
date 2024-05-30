@@ -24,7 +24,7 @@ public enum CommonPermission
 public class MMItemMetadata
 {
     /// <summary>
-    /// The constructor for menu item Metadata. 
+    /// Constructor for menu item Metadata. 
     /// </summary>
     /// <param name="itemName">The name of your menu item.</param>
     /// <param name="tooltip">The tooltip for your menu item. Shown when hovering on the item.</param>
@@ -34,6 +34,7 @@ public class MMItemMetadata
         if(tooltip is not null)
             Tooltip = tooltip;
     }
+    /// <inheritdoc cref="MMItemMetadata(string, string?)" />
     public MMItemMetadata(string itemName)
         : this(itemName, null) { }
     /// <summary>
@@ -52,11 +53,4 @@ public class MMItemMetadata
     /// Should the menu item be invoked (toggled or executed) immediately after creation.
     /// </summary>
     public bool InvokeOnInit = false;
-}
-
-public enum MMItemType
-{
-    ActionButton,
-    ContextMenu,
-    ToggleButton
 }

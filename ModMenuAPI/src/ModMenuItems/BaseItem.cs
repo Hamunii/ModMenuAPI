@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 
 namespace ModMenuAPI.ModMenuItems.BaseItems;
@@ -8,8 +9,18 @@ namespace ModMenuAPI.ModMenuItems.BaseItems;
 /// </summary>
 public abstract class MMItemBase
 {
-    public MMItemBase(string itemName) : this(new MMItemMetadata(itemName)) { }
-    public MMItemBase(string itemName, string tooltip) : this(new MMItemMetadata(itemName, tooltip)) { }
+    /// <inheritdoc cref="MMItemBase(string, string)" />
+    public MMItemBase(string itemName) : this(itemName, null) { }
+    /// <summary>
+    /// A Constructor for this menu item.
+    /// </summary>
+    /// <param name="itemName">The name of this item. Internally used as the <c>itemName</c> argument of <see cref="MMItemMetadata"/></param>
+    /// <param name="tooltip">The tooltip for your menu item. Shown when hovering on the item. Internally used as the <c>tooltip</c> argument of <see cref="MMItemMetadata"/></param>
+    public MMItemBase(string itemName, string? tooltip) : this(new MMItemMetadata(itemName, tooltip)) { }
+    /// <summary>
+    /// A Constructor for this menu item.
+    /// </summary>
+    /// <param name="metadata">The metadata for this item.</param>
     public MMItemBase(MMItemMetadata metadata)
     {
         Metadata = metadata;
@@ -20,7 +31,7 @@ public abstract class MMItemBase
     /// <summary>
     /// The type of this menu item.
     /// </summary>
-    internal abstract MMItemType ItemType { get; }
+    public abstract Type ItemType { get; }
 
     /// <summary>
     /// The metadata for this menu item.
@@ -37,5 +48,5 @@ public abstract class MMItemBase
     /// </summary>
     public bool Clickable { get; set; } = true;
 
-    internal Assembly ParentAssembly { get; set; } = null!;
+    internal Assembly ParentAssembly = null!;
 }

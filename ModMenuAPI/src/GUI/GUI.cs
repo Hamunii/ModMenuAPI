@@ -137,7 +137,7 @@ internal class ModMenuGUI : MonoBehaviour
         foreach (var menuItem in menu.MenuItems)
         {   
             GUIStyle? currentButtonStyle = null;
-            if (menuItem.ItemType == MMItemType.ToggleButton)
+            if (menuItem.ItemType == typeof(MMButtonToggle))
                 currentButtonStyle = ((MMButtonToggle)menuItem).Enabled ? toggleEnabledButtonStyle : toggleDisabledButtonStyle;
             else
                 currentButtonStyle = actionButtonStyle;
@@ -148,7 +148,7 @@ internal class ModMenuGUI : MonoBehaviour
             else if (GUI.Button(new Rect(CenterX + menuIdx * MenuWidth * 1.05f, MenuY + 30 + (ItemIdx * 30), ItemWidth, 30), $"{menuItem.Metadata.Name}", currentButtonStyle))
             {
                 menuItem.CommonInvoke();
-                if (menuItem.ItemType == MMItemType.ContextMenu)
+                if (menuItem.ItemType == typeof(MMButtonMenu))
                 {
                     contextMenuOwner = (MMButtonMenu)menuItem;
                     contextMenuX = (menuIdx + 1) * MenuWidth * 1.05f;
@@ -172,7 +172,7 @@ internal class ModMenuGUI : MonoBehaviour
         foreach (var menuItem in contextMenuOwner.MenuItems)
         {   
             GUIStyle? currentButtonStyle = null;
-            if (menuItem.ItemType == MMItemType.ToggleButton)
+            if (menuItem.ItemType == typeof(MMButtonToggle))
                 currentButtonStyle = ((MMButtonToggle)menuItem).Enabled ? toggleEnabledButtonStyle : toggleDisabledButtonStyle;
             else
                 currentButtonStyle = actionButtonStyle;

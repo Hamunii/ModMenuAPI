@@ -26,7 +26,7 @@ public static class ModMenu
     public static void RegisterItem(MMItemBase menuItem, string menuTitle)
     {
         menuItem.ParentAssembly = Assembly.GetCallingAssembly();
-        MMLog.Log($"Adding item \"{menuItem.Metadata.Name}\" from assembly: " + menuItem.ParentAssembly.FullName);
+        // MMLog.Log($"Adding item \"{menuItem.Metadata.Name}\" from assembly: " + menuItem.ParentAssembly.FullName);
 
         ModMenuMenuItem? menu = ModMenus.Find(x => x.MenuTitle.ToLower().Equals(menuTitle.ToLower()));
         if(menu is not null)
@@ -65,7 +65,7 @@ public static class ModMenu
     /// </summary>
     public static void RemoveAllOwnedBy(Assembly ass)
     {
-        MMLog.Log("Removing items from Assembly: " + ass.FullName);
+        // MMLog.Log("Removing items from Assembly: " + ass.FullName);
         var assNameNoNum = Regex.Replace(ass.FullName, "[0-9]", "");
 
         var em = ModMenus.GetEnumerator();

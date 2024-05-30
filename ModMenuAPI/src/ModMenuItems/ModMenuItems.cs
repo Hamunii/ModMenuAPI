@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ModMenuAPI.ModMenuItems.BaseItems;
 
@@ -8,13 +9,18 @@ namespace ModMenuAPI.ModMenuItems;
 /// </summary>
 public abstract class MMButtonAction : MMItemBase
 {
+    /// <inheritdoc/>
+    public sealed override Type ItemType { get; } = typeof(MMButtonAction);
+    /// <inheritdoc/>
     protected MMButtonAction(string itemName) : base(itemName) { }
+    /// <inheritdoc/>
     protected MMButtonAction(string itemName, string tooltip) : base(itemName, tooltip) { }
+    /// <inheritdoc/>
     protected MMButtonAction(MMItemMetadata metadata) : base(metadata) { }
 
-    internal override MMItemType ItemType => MMItemType.ActionButton;
-
-    public abstract void OnClick();
+    /// <inheritdoc/>
+    protected abstract void OnClick();
+    /// <inheritdoc/>
     public override void CommonInvoke()
     {
         if(!Clickable)
@@ -30,23 +36,46 @@ public abstract class MMButtonAction : MMItemBase
 /// </summary>
 public abstract class MMButtonMenu : MMItemBase
 {
-    protected MMButtonMenu(string itemName) : this(new MMItemMetadata(itemName), new()) { }
-    protected MMButtonMenu(string itemName, List<MMItemBase> menuItems) : this(new MMItemMetadata(itemName), menuItems) { }
+    /// <inheritdoc/>
+    public sealed override Type ItemType { get; } = typeof(MMButtonMenu);
 
-    protected MMButtonMenu(string itemName, string tooltip) : this(new MMItemMetadata(itemName, tooltip), new()) { }
-    protected MMButtonMenu(string itemName, string tooltip, List<MMItemBase> menuItems) : this(new MMItemMetadata(itemName, tooltip), menuItems) { }
-    
+    /// <inheritdoc/>
+    protected MMButtonMenu(string itemName)                             : this(itemName, tooltip: null) { }
+    /// <inheritdoc cref="MMButtonMenu(string, string, List{MMItemBase})"/> // Why does this one need the cref to work???
+    protected MMButtonMenu(string itemName, List<MMItemBase> menuItems) : this(itemName, tooltip: null, menuItems) { }
+
+
+    /// <inheritdoc/>
+    protected MMButtonMenu(string itemName, string? tooltip)             : this(itemName, tooltip, []) { }
+    /// <inheritdoc cref="MMItemBase(string, string)"/> <param name="itemName"></param> <param name="tooltip"></param>
+    /// <param name="menuItems">The list of menu items in this menu.</param>
+    protected MMButtonMenu(string itemName, string? tooltip, List<MMItemBase> menuItems) : this(new MMItemMetadata(itemName, tooltip), menuItems) { }
+
+
+    /// <inheritdoc/>
     protected MMButtonMenu(MMItemMetadata metadata) : this(metadata, new()) { }
+    /// <inheritdoc cref="MMItemBase(MMItemMetadata)"/> <param name="metadata"></param>
+    /// <param name="menuItems">The list of menu items in this menu.</param>
     protected MMButtonMenu(MMItemMetadata metadata, List<MMItemBase> menuItems) : base(metadata)
     {
         MenuItems = menuItems;
     }
 
-    internal override MMItemType ItemType => MMItemType.ContextMenu;
+    /// <summary>
+    /// The list of menu items in this menu.
+    /// </summary>
     public readonly List<MMItemBase> MenuItems;
+    
+    /// <summary>
+    /// Runs when the submenu is opened.
+    /// </summary>
     public abstract void OnMenuOpened();
+    /// <summary>
+    /// Runs when the submenu is closed.
+    /// </summary>
     public abstract void OnMenuClosed();
-    public override void CommonInvoke()
+    /// <inheritdoc/>
+    public sealed override void CommonInvoke()
     {
         if(!Clickable)
             return;
@@ -58,18 +87,27 @@ public abstract class MMButtonMenu : MMItemBase
 /// <summary>
 /// A basic button that opens a context menu. Use <c>MenuItems</c> to manage the items this context menu contains.
 /// </summary>
-public class MMButtonMenuInstantiable : MMButtonMenu
+public sealed class MMButtonMenuInstantiable : MMButtonMenu
 {
+    /// <inheritdoc/>
     public MMButtonMenuInstantiable(string itemName) : base(itemName) { }
+    /// <inheritdoc/>
     public MMButtonMenuInstantiable(string itemName, List<MMItemBase> menuItems) : base(itemName, menuItems) { }
 
-    public MMButtonMenuInstantiable(string itemName, string tooltip) : base(itemName, tooltip) { }
-    public MMButtonMenuInstantiable(string itemName, string tooltip, List<MMItemBase> menuItems) : base(itemName, tooltip, menuItems) { }
-    
-    public MMButtonMenuInstantiable(MMItemMetadata metadata) : base(metadata) { }
-    public MMButtonMenuInstantiable(MMItemMetadata metadata, List<MMItemBase> menuItems) : base(metadata, menuItems) { }
 
+    /// <inheritdoc/>
+    public MMButtonMenuInstantiable(string itemName, string tooltip) : base(itemName, tooltip) { }
+    /// <inheritdoc/>
+    public MMButtonMenuInstantiable(string itemName, string tooltip, List<MMItemBase> menuItems) : base(itemName, tooltip, menuItems) { }
+
+
+    /// <inheritdoc/>
+    public MMButtonMenuInstantiable(MMItemMetadata metadata) : base(metadata) { }
+    /// <inheritdoc/>
+    public MMButtonMenuInstantiable(MMItemMetadata metadata, List<MMItemBase> menuItems) : base(metadata, menuItems) { }
+    /// <inheritdoc/>
     public override void OnMenuOpened() { }
+    /// <inheritdoc/>
     public override void OnMenuClosed() { }
 }
 
@@ -78,15 +116,19 @@ public class MMButtonMenuInstantiable : MMButtonMenu
 /// </summary>
 public abstract class MMButtonToggle : MMItemBase
 {
-    internal override MMItemType ItemType => MMItemType.ToggleButton;
+    /// <inheritdoc/>
+    public sealed override Type ItemType { get; } = typeof(MMButtonToggle);
+
+    /// <inheritdoc/>
+    protected MMButtonToggle(string itemName)                   : base(itemName) { }
+    /// <inheritdoc/>
+    protected MMButtonToggle(string itemName, string tooltip)   : base(itemName, tooltip) { }
+    /// <inheritdoc/>
+    protected MMButtonToggle(MMItemMetadata metadata)           : base(metadata) { }
+
     private bool _enabled = false;
-
-    protected MMButtonToggle(string itemName) : base(itemName) { }
-    protected MMButtonToggle(string itemName, string tooltip) : base(itemName, tooltip) { }
-    protected MMButtonToggle(MMItemMetadata metadata) : base(metadata) { }
-
     /// <summary>
-    /// State of the patch.
+    /// The state of the toggle. Toggling this will call <c>OnEnable</c> / <c>OnDisable</c>.
     /// </summary>
     public bool Enabled
     {
@@ -112,7 +154,8 @@ public abstract class MMButtonToggle : MMItemBase
     /// Runs when <c>Enabled</c> is set to <c>false</c> and the value changed.
     /// </summary>
     protected abstract void OnDisable();
-    public override void CommonInvoke()
+    /// <inheritdoc/>
+    public sealed override void CommonInvoke()
     {
         if(!Clickable)
             return;
@@ -128,12 +171,16 @@ public abstract class MMButtonToggle : MMItemBase
 /// <summary>
 /// A basic toggle button. Use <c>Enabled</c> to get the state of the button.
 /// </summary>
-public class MMButtonToggleInstantiable : MMButtonToggle
+public sealed class MMButtonToggleInstantiable : MMButtonToggle
 {
-    public MMButtonToggleInstantiable(string itemName) : base(itemName) { }
-    public MMButtonToggleInstantiable(MMItemMetadata metadata) : base(metadata) { }
-    public MMButtonToggleInstantiable(string itemName, string tooltip) : base(itemName, tooltip) { }
-
+    /// <inheritdoc/>
+    public MMButtonToggleInstantiable(string itemName)                  : base(itemName) { }
+    /// <inheritdoc/>
+    public MMButtonToggleInstantiable(MMItemMetadata metadata)          : base(metadata) { }
+    /// <inheritdoc/>
+    public MMButtonToggleInstantiable(string itemName, string tooltip)  : base(itemName, tooltip) { }
+    /// <inheritdoc/>
     protected override void OnDisable() { }
+    /// <inheritdoc/>
     protected override void OnEnable() { }
 }

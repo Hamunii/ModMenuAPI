@@ -1,9 +1,10 @@
-using UnityEngine;
-using MonoMod.RuntimeDetour.HookGen;
 using System.Reflection;
+using BepInEx;
 using ModMenuAPI.MenuGUI;
+using ModMenuAPI.Meta; // Don't remove, used by non-debug version
 using ModMenuAPI.ModMenuItems;
-using BepInEx; // Don't remove, used by non-debug version
+using MonoMod.RuntimeDetour.HookGen;
+using UnityEngine;
 
 namespace ModMenuAPI;
 
@@ -16,6 +17,7 @@ internal class BepPlugin : BaseUnityPlugin
         MMLog.Logger = base.Logger;
         Plugin.OnLoad();
     }
+
     private void OnDestroy() => Plugin.Dispose();
 }
 #else
@@ -31,6 +33,7 @@ public static class HotLoadPlugin
         MMLog.Logger = BepInEx.Logging.Logger.CreateLogSource(PluginInfo.PLUGIN_GUID);
         Plugin.OnLoad();
     }
+
     public static void Dispose() => Plugin.Dispose();
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }
@@ -39,6 +42,7 @@ public static class HotLoadPlugin
 internal static class Plugin
 {
     internal static GameObject myGUIObject = null!;
+
     internal static void OnLoad()
     {
         MMLog.Log($"{PluginInfo.PLUGIN_GUID} v{PluginInfo.PLUGIN_VERSION} has loaded!");
@@ -46,9 +50,11 @@ internal static class Plugin
         InitializeGUI();
     }
 
-    internal static void InitializeGUI(){
+    internal static void InitializeGUI()
+    {
         ModMenuGUI.canOpenDevToolsMenu = true;
-        if(!ModMenuGUI.menuExists){
+        if (!ModMenuGUI.menuExists)
+        {
             myGUIObject = new GameObject("ModMenuAPI_GUI");
             UnityEngine.Object.DontDestroyOnLoad(myGUIObject);
             myGUIObject.hideFlags = HideFlags.HideAndDontSave;

@@ -1,7 +1,5 @@
 using System.Reflection;
-using BepInEx;
 using ModMenuAPI.MenuGUI;
-using ModMenuAPI.Meta; // Don't remove, used by non-debug version
 using ModMenuAPI.ModMenuItems;
 using MonoMod.RuntimeDetour.HookGen;
 using UnityEngine;
@@ -9,8 +7,8 @@ using UnityEngine;
 namespace ModMenuAPI;
 
 #if !DEBUG
-[BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
-internal class BepPlugin : BaseUnityPlugin
+[BepInEx.BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
+internal class BepPlugin : BepInEx.BaseUnityPlugin
 {
     private void Awake()
     {

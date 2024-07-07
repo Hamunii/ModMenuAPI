@@ -48,6 +48,8 @@ internal static class Plugin
         MMLog.Log($"{PluginInfo.PLUGIN_GUID} v{PluginInfo.PLUGIN_VERSION} has loaded!");
 
         InitializeGUI();
+
+        ConfigMenu.Init();
     }
 
     internal static void InitializeGUI()

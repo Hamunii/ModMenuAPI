@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using ModMenuAPI.ModMenuItems;
 using ModMenuAPI.ModMenuItems.BaseItems;
+using ModMenuAPI.Meta;
 
 namespace ModMenuAPI.MenuGUI;
 
@@ -122,6 +123,9 @@ internal class ModMenuGUI : MonoBehaviour
         int menuIdx = 0;
         foreach (var menu in ModMenu.ModMenus)
         {
+            if (menuIdx != 0)
+                if (!ConfigMenu.ShowMenus)
+                    continue;
             // Plugin.Logger.LogInfo("Drawing " + menu.MenuTitle);
             DrawMenu(ref menuIdx, menu);
         }
